@@ -1,5 +1,5 @@
 import { main } from './index.jsx';
-import modal from "./modal.jsx";
+import { searchModal } from "./modal.jsx";
 
 export const REQUEST_TYPE = {
     POST: "post",
@@ -19,7 +19,7 @@ export const apiRoutes = [
     {
         type: REQUEST_TYPE.GET,
         route: "/modal/podcast",
-        callback: () => modal.searchModal,
+        callback: () => searchModal,
     },
     {
         type: REQUEST_TYPE.DELETE,

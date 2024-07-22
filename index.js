@@ -4,7 +4,7 @@ import { staticPlugin } from "@elysiajs/static";
 import { GitHub , generateState } from "arctic";
 import { routes, apiRoutes, REQUEST_TYPE } from "./src/routes.js";
 
-const app = new Elysia().use(html());
+const app = new Elysia().use(html()).use(staticPlugin());
 
 routes.forEach((routerObj) => {
   app.get(routerObj.route, routerObj.callback);
@@ -30,8 +30,6 @@ apiRoutes.forEach((apiObj) => {
       break;
   }
 });
-
-app.use(staticPlugin()); // load in css and other public/ assets
 
 //// -- deal with oauth here
 const clientId = "" // grab from env varaibles
@@ -88,7 +86,7 @@ app.get("/accounts/github/login/callback", async ({query, cookie : {github_oauth
 });
 
 app.get("/logout", async () => {
-
+  return <p>blah</p>;
 });
 
 // end oauth 

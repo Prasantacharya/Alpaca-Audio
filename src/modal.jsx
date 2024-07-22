@@ -1,7 +1,7 @@
 /**
  * returned via route from HTMX
  */
-const loginModal = () => {
+export const loginModal = () => {
     return (
       <div id="modal">
       <div class="modal-underlay" hx-on="click" hx-delete="/delete-modal" hx-swap="outerHTML" hx-target="#modal"></div>
@@ -17,7 +17,7 @@ const loginModal = () => {
 
 /**
  */
-const searchModal = () => {
+export const searchModal = () => {
     return (
         <div id="modal">
         <div class="modal-underlay" hx-on="click" hx-delete="/delete-modal" hx-swap="outerHTML" hx-target="#modal"></div>
@@ -39,5 +39,3 @@ const searchModal = () => {
     
     );
 }
-
-module.exports = { searchModal, loginModal };
