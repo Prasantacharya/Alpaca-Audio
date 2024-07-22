@@ -50,19 +50,12 @@ app.get("/accounts/github/login", async ({redirect , cookie: {github_oauth_state
       "secure": false,
       "path": "/"
     });
-    // const seralizedCookie = serializeCookie("github_oauth_state", state, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   maxAge: 60 * 10,
-    //   path: "/"
-    // });
     return redirect(url);
 });
 
 app.get("/accounts/github/login/callback", async ({query, cookie : {github_oauth_state}}) => {
   console.log("! -- RESPONSE FROM GITHUB! -- !");
-
-  // console.log(name.toString());
+  
   console.log(github_oauth_state.value);
   console.log("CODE - " + query.code);
   console.log("state - " + query.state);
@@ -96,8 +89,7 @@ app.get("/accounts/github/login/callback", async ({query, cookie : {github_oauth
 
 app.get("/logout", async () => {
 
-})
-
+});
 
 // end oauth 
 
