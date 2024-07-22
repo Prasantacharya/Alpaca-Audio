@@ -7,9 +7,9 @@ DB.open({
     type: "YottaDB",
     path: "/usr/local/lib/yottadb/r200",
     env_vars: {
-        ydb_gbldir: "", // get from env
-        ydb_routines: "", // get from env
-        ydb_ci: '' // get from env
+        ydb_gbldir: process.env.ydb_gbldir, // get from env
+        ydb_routines: process.env.ydb_routines, // get from env
+        ydb_ci: process.env.ydb_ci, // get from env
     }
 });
 

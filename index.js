@@ -32,8 +32,8 @@ apiRoutes.forEach((apiObj) => {
 });
 
 //// -- deal with oauth here
-const clientId = "" // grab from env varaibles
-const clientSecret = "" // grab from env variables
+const clientId = process.env.GITHUB_CLIENT_ID // grab from env varaibles
+const clientSecret = process.env.GITHUB_CLIENT_SECRET // grab from env variables
 const github = new GitHub(clientId, clientSecret);
 
 app.get("/accounts/github/login", async ({redirect , cookie: {github_oauth_state}}) => {
