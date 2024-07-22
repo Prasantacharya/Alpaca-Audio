@@ -1,0 +1,78 @@
+
+.contentArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+button {
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    padding: 0;
+    text-align: inherit;
+    font: inherit;
+    border-radius: 0;
+    appearance: none;
+}
+.card{
+    display: flex;
+    flex-direction: row;
+    max-height: 15em;
+    max-width: 45em;
+    padding-right: 10px;
+    margin: 7px;
+    background-color: var(--nord1);
+    color: var(--nord6);
+    border-radius: 1em;
+    transition: all .2s ease-in-out; 
+}   
+
+.card:hover {
+    outline: 2px var(--accent-c) solid;
+    background-color: var(--nord2);
+    color: var(--nord5);
+    outline-offset: -1px;
+    cursor: pointer;
+    transform: scale(102%);
+}
+
+.card:active {
+    outline: 4px var(--nord10) solid;
+    background-color: var(--nord3);
+    color: var(--nord4);
+    outline-offset: -1px;
+    transform: scale(104%);
+    cursor: pointer;
+}
+
+.card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top:10px;
+    transition: all .2s ease-in-out; 
+} 
+
+.card-header:hover {
+    transform: scale(102%);
+} 
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-image {
+    max-width: 150px;
+    margin-right: 10px;
+    border-radius: 1em 0 0 1em;
+    /*outline: 2px var(--accent-c) solid;*/
+}
+
+.card-footer {
+    margin-top: auto;
+}
