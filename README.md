@@ -51,3 +51,4 @@ Installing mg-dbx-napi
 You should be have the everything for the database set up! 
 
 If you close the terminal you are working in, you have to repeat step 3 and 4 before running.
+You can use `bun run init-db` to automate steps 3 and 4 for you.

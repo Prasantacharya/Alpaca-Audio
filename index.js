@@ -1,9 +1,10 @@
-import { Elysia,t } from "elysia";
+import { Elysia,redirect,t } from "elysia";
 import { html } from "@elysiajs/html";
 import { staticPlugin } from "@elysiajs/static";
 import { GitHub , generateState } from "arctic";
 import { routes, apiRoutes, REQUEST_TYPE } from "./src/routes.js";
-import { SESSIONS } from "./database.js";
+import { SESSIONS } from "./src/database.js";
+import { serializeCookie } from "oslo/cookie";
 
 const app = new Elysia().use(html()).use(staticPlugin());
 
@@ -52,30 +53,26 @@ app.get("/accounts/github/login", async ({redirect , cookie: {github_oauth_state
     return redirect(url);
 });
 
-app.get("/accounts/github/login/callback", async ({redirect, query, cookie : {github_oauth_state}}) => {
+app.get("/accounts/github/login/callback", async ({query, cookie : {github_oauth_state}}) => {
   console.log("! -- RESPONSE FROM GITHUB! -- !");
-  
-  console.log(github_oauth_state.value);
-  console.log("CODE - " + query.code);
-  console.log("state - " + query.state);
 
   if(!query.code || !github_oauth_state.value || query.state !== github_oauth_state.value){
+    console.log("UNUSABLE STATE");
     return new Response(null, {
       status: 401
     })
   }
 
   try {
+    console.log("ASKING GITHUB FOR USER INFO")
     const tokens = await github.validateAuthorizationCode(query.code);
     const githubUserResponse = await fetch("https://api.github.com/user", {
 			headers: {
 				Authorization: `Bearer ${tokens.accessToken}`
 			}
 		});
-    
+    console.log("FETCHING")
     const githubUserResult = await githubUserResponse.json();
-    console.log(githubUserResult);
-    let main_page_redirect = redirect("/");
     // TODO
     // create session for user
     /** 
@@ -86,13 +83,18 @@ app.get("/accounts/github/login/callback", async ({redirect, query, cookie : {gi
     const csrfToken = Math.round(Math.random() * 10000000)
 
     // 
-    return main_page_redirect;
+    return redirect("/")
   } catch (e) {
-
+    console.log("UH OH SPAGETTI OH");
   }
-
+  console.log("MADE IT")
   // replace with a redirect to '/'
-  return redirect("/");
+  return new Response(null, {
+    status: 301,
+    headers: {
+      Location: "/",
+    }
+  }).redirect("/", 301);
 }, {
     query: t.Object({
         code: t.String(),
