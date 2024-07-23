@@ -3,6 +3,7 @@ import { html } from "@elysiajs/html";
 import { staticPlugin } from "@elysiajs/static";
 import { GitHub , generateState } from "arctic";
 import { routes, apiRoutes, REQUEST_TYPE } from "./src/routes.js";
+import { SESSIONS } from "./database.js";
 
 const app = new Elysia().use(html()).use(staticPlugin());
 
@@ -51,7 +52,7 @@ app.get("/accounts/github/login", async ({redirect , cookie: {github_oauth_state
     return redirect(url);
 });
 
-app.get("/accounts/github/login/callback", async ({query, cookie : {github_oauth_state}}) => {
+app.get("/accounts/github/login/callback", async ({redirect, query, cookie : {github_oauth_state}}) => {
   console.log("! -- RESPONSE FROM GITHUB! -- !");
   
   console.log(github_oauth_state.value);
@@ -71,13 +72,27 @@ app.get("/accounts/github/login/callback", async ({query, cookie : {github_oauth
 				Authorization: `Bearer ${tokens.accessToken}`
 			}
 		});
+    
     const githubUserResult = await githubUserResponse.json();
+    console.log(githubUserResult);
+    let main_page_redirect = redirect("/");
+    // TODO
+    // create session for user
+    /** 
+    user.set()
+    */
+    // add csrf token to header
+    // creates an 8 digit random number for the csrf token
+    const csrfToken = Math.round(Math.random() * 10000000)
 
+    // 
+    return main_page_redirect;
   } catch (e) {
 
   }
 
-  return <div>LOGGED IN</div>;
+  // replace with a redirect to '/'
+  return redirect("/");
 }, {
     query: t.Object({
         code: t.String(),

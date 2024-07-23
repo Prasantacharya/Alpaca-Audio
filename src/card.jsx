@@ -1,9 +1,7 @@
 import { SESSIONS } from "./database.js";
 
 export const PodcastCard = ({cookie: { name }, set, error}) => {
-    if(name){
-        
-    }
+    console.log("name cookie - " + name);
     return (
         <div class="podcast-card">
         <img class="podcast-card-image" src={dbObj.podcastImg} />
