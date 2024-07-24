@@ -6,16 +6,8 @@ import { SESSIONS } from "./database.js";
  * @argument cookie - contains the user id that is set when they log in
  * @argument set - contains the CSRF token that is set on the server - compare with the SESSION to see if the user is who we think they are 
  */
-export const main = ({cookie: { name }, set, error}) => {
-    let loggedInUser;
-    let loggedInUserPodcasts;
-    // first check if the CSRF token matches
-    let checkId = SESSIONS.get(set.headers['csrf-token']) 
-    if(checkId === name.u_id){
-        loggedInUser = true;
-        // grab their podcasts
-        // TODO
-    }
+export const main = ({cookie: { user_Cookie }, set, error}) => {
+    console.log("USER COOKIE: " + user_Cookie.value);
     return (
         <html lang='en'>
             <head>

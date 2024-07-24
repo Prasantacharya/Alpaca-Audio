@@ -1,10 +1,11 @@
-import { Elysia,redirect,t } from "elysia";
+import { Cookie, Elysia,redirect,t } from "elysia";
 import { html } from "@elysiajs/html";
 import { staticPlugin } from "@elysiajs/static";
 import { GitHub , generateState } from "arctic";
 import { routes, apiRoutes, REQUEST_TYPE } from "./src/routes.js";
 import { SESSIONS } from "./src/database.js";
 import { serializeCookie } from "oslo/cookie";
+import {generateRandomInteger} from "oslo/crypto"
 
 const app = new Elysia().use(html()).use(staticPlugin());
 
@@ -43,7 +44,6 @@ app.get("/accounts/github/login", async ({redirect , cookie: {github_oauth_state
     const url = await github.createAuthorizationURL(state, {
       scopes: ["user:email"]
     });
-    console.log("login state - " + state);
     github_oauth_state.set({
       "value": state,
       "httpOnly": true,
@@ -53,11 +53,9 @@ app.get("/accounts/github/login", async ({redirect , cookie: {github_oauth_state
     return redirect(url);
 });
 
-app.get("/accounts/github/login/callback", async ({query, cookie : {github_oauth_state}}) => {
+app.get("/accounts/github/login/callback", async ({query, cookie : {github_oauth_state, user_Cookie}}) => {
   console.log("! -- RESPONSE FROM GITHUB! -- !");
-
   if(!query.code || !github_oauth_state.value || query.state !== github_oauth_state.value){
-    console.log("UNUSABLE STATE");
     return new Response(null, {
       status: 401
     })
@@ -73,6 +71,13 @@ app.get("/accounts/github/login/callback", async ({query, cookie : {github_oauth
 		});
     console.log("FETCHING")
     const githubUserResult = await githubUserResponse.json();
+    console.log(user_Cookie);
+    user_Cookie.value = {
+      isLoggedIn: true,
+      username: "PrasantAcharya",
+      uid: "prasantacharyabusiness@gmail.com",
+      sessionId: 123123123123,
+    };
     // TODO
     // create session for user
     /** 
@@ -80,12 +85,12 @@ app.get("/accounts/github/login/callback", async ({query, cookie : {github_oauth
     */
     // add csrf token to header
     // creates an 8 digit random number for the csrf token
-    const csrfToken = Math.round(Math.random() * 10000000)
-
+    const csrfToken = generateRandomInteger(10000000);
+    const userName = "TEST";
     // 
     return redirect("/")
   } catch (e) {
-    console.log("UH OH SPAGETTI OH");
+    console.log("UH OH SPAGETTI OH : " + e);
   }
   console.log("MADE IT")
   // replace with a redirect to '/'
@@ -100,6 +105,7 @@ app.get("/accounts/github/login/callback", async ({query, cookie : {github_oauth
         code: t.String(),
         state: t.String(),
     })
+    // add afterHandle to edit the header
 });
 
 app.get("/logout", async () => {
