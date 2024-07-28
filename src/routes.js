@@ -1,29 +1,11 @@
-import { main } from './index.jsx';
-import { searchModal } from "./modal.jsx";
+import Elysia from 'elysia';
+import { main } from './user-podcasts-page/index.jsx';
+import { loginModal, searchModal } from "./ui-components/modal.jsx";
 
-export const REQUEST_TYPE = {
-    POST: "post",
-    GET: "get",
-    DELETE: "delete",
-    UPDATE: "update"
-}
+export const routes = new Elysia()
+    .get("/", main);
 
-export const routes = [
-    {
-        route: "/",
-        callback: main,
-    },
-];
-
-export const apiRoutes = [
-    {
-        type: REQUEST_TYPE.GET,
-        route: "/modal/podcast",
-        callback: () => searchModal,
-    },
-    {
-        type: REQUEST_TYPE.DELETE,
-        route: "/delete-modal",
-        callback: () => {return ;},
-    }
-];
+export const htmxRoutes = new Elysia()
+    .get("/modal/podcast", searchModal)
+    .get("/modal/login", loginModal)
+    .delete("/delete-modal", () => {return ;});

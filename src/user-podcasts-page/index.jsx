@@ -1,5 +1,4 @@
 import { AddPodcastCard } from "./card.jsx";
-import { SESSIONS } from "./database.js";
 
 /**
  * Main function for home page of app

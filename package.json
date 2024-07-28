@@ -3,23 +3,24 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "^1.1.6"
+    "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.5.3"
   },
   "dependencies": {
     "@elysiajs/html": "1.0.2",
+    "@elysiajs/jwt": "^1.1.0",
     "@elysiajs/static": "1.0.3",
     "arctic": "1.9.2",
     "elysia": "1.1.0",
     "lucia": "^3.2.0",
-    "mg-dbx-napi": "1.4.10",
+    "mg-dbx-napi": "^1.4.10",
     "oslo": "1.2.1",
     "rss-parser": "3.13.0"
   },
   "scripts": {
-    "init": "source /usr/local/etc/ydb_env_unset && export ydb_dir=$PWD/yottadb && source /usr/local/etc/ydb_env_set",
-    "start": "bun index.js"
+    "init-db": "source /usr/local/etc/ydb_env_unset && export ydb_dir=$PWD/yottadb && source /usr/local/etc/ydb_env_set",
+    "start-timestamp": "bun index.js"
   }
 }
