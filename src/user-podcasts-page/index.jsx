@@ -1,4 +1,4 @@
-import { AddPodcastCard } from "./card.jsx";
+import { AddPodcastCard } from "../ui-components/card.jsx";
 
 /**
  * Main function for home page of app

@@ -14,5 +14,5 @@ DB.open({
 });
 
 export const FEED = new mglobal(DB, "feed"); // list of rss feeds and the data associated with them
-export const SESSIONS = new Map();
+export const USERS = new mglobal(DB, "users");
 export const NOTES = new mglobal(DB, "notes");

@@ -1,4 +1,4 @@
-import { SESSIONS } from "./database.js";
+import { USERS } from "../database/database.js";
 
 export const PodcastCard = ({cookie: { user_Cookie }, set, error}) => {
     return (
