@@ -13,6 +13,13 @@ DB.open({
     }
 });
 
+export const $DATA = {
+    DOES_NOT_EXIST : "0",
+    EXISTS_AND_NO_DESCENDANTS : "1",
+    HAS_DATA_AND_DESCENDANTS : "11",
+    NO_DATA_AND_DESCENDANTS : "10"
+}
+
 export const FEED = new mglobal(DB, "feed"); // list of rss feeds and the data associated with them
 export const USERS = new mglobal(DB, "users");
 export const NOTES = new mglobal(DB, "notes");
