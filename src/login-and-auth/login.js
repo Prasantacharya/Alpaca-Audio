@@ -8,6 +8,8 @@ const clientId = process.env.GITHUB_CLIENT_ID // grab from env varaibles
 const clientSecret = process.env.GITHUB_CLIENT_SECRET // grab from env variables
 const github = new GitHub(clientId, clientSecret);
 
+const REFRESH_TOKEN_INCREMENT = "refreshTokenIncrement";
+
 if(!SECURE_FLAG) console.log("WARNING - SECURE_FLAG in login.js set to false!")
 
 function getExpTimestamp(seconds) {
@@ -38,7 +40,7 @@ export const authPlugin = (app) => {
     
     // if the refresh token version does not match with the version in the database
     // that means that the user is logged out
-    if(refreshVerify.refresh_token_version !== parseInt(USERS.get(accessToken.sub, "refreshTokenIncrement"))){
+    if(refreshVerify.refresh_token_version !== parseInt(USERS.get(accessToken.sub, REFRESH_TOKEN_INCREMENT))){
       return {
         userId: ""
       }
@@ -106,7 +108,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
         // sign up the user
         console.log("USER DOES NOT EXIST YET");
         USERS.set(githubUserData.email, githubUserData.name);
-        USERS.set(githubUserData.email, "refreshTokenIncrement", "0");
+        USERS.set(githubUserData.email, REFRESH_TOKEN_INCREMENT, "0");
         refreshTokenVersion = 0;
         break;
       case $DATA.EXISTS_AND_NO_DESCENDANTS:
@@ -117,7 +119,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
       case $DATA.HAS_DATA_AND_DESCENDANTS:
         // the user exists, and they 
         console.log("USER EXISTS");
-        refreshTokenVersion = parseInt(USERS.increment(githubUserData.email, "refreshTokenIncrement"));
+        refreshTokenVersion = parseInt(USERS.increment(githubUserData.email, REFRESH_TOKEN_INCREMENT));
         break;
       case $DATA.NO_DATA_AND_DESCENDANTS:
         // this should be impossible, flag error just in case
@@ -190,5 +192,6 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
     set.status = "Forbidden";
   }
   // after auth token runs out, that should invalidate all sessions
-  USERS.set(accessTokenVerified.sub, )
+  USERS.increment(accessTokenVerified.sub, REFRESH_TOKEN_INCREMENT, 1);
+  return redirect("/");
 });
