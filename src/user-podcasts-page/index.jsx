@@ -1,19 +1,7 @@
 import { AddPodcastCard } from "../ui-components/card.jsx";
 import { jwt } from '@elysiajs/jwt'
 
-/**
- * Main function for home page of app
- * @argument cookie - contains the user id that is set when they log in
- * @argument set - contains the CSRF token that is set on the server - compare with the SESSION to see if the user is who we think they are 
- */
-export const main = async ({cookie: { accessToken, refreshToken }, set}) => {
-    const profile = await jwt.verify(accessToken.value);
-    console.log("Access token - " + accessToken.value + " | profile: " + profile);
-    if (!profile){
-        set.status = 401;
-        return 'Unauthorized';
-    }
-    console.log("USER COOKIE: " + user_Cookie.value);
+export const main = async () => {
     return (
         <html lang='en'>
             <head>
@@ -23,7 +11,7 @@ export const main = async ({cookie: { accessToken, refreshToken }, set}) => {
                 <link rel="stylesheet" href="./public/style.css" />
                 <link rel="stylesheet" href="./public/podcast-card.css" />
                 <link rel="stylesheet" href="./public/modal.css" />
-                <title>Hello World</title>
+                <title>TimeStamp</title>
             </head>
             <body>
                 <script src="https://unpkg.com/htmx.org@1.6.0"></script>

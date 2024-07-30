@@ -27,14 +27,6 @@ export const authPlugin = (app) => {
     })
   )
   .derive( async ({ jwt, cookie: {accessToken, refreshToken}}) => {
-    // first check refresh token
-    //    if its out of date
-    //      the user is logged out
-    //    if its in date and the access token is out of date
-    //       give them a new access token
-    //    if its in date and access token is in date
-    //       
-    //      
     if(!accessToken.value || !refreshToken.value) {
       set.status = "Unauthorized";
     }
@@ -43,7 +35,30 @@ export const authPlugin = (app) => {
     if (!refreshVerify || !jwtVerify){
       set.status = "Forbidden";
     }
-    // you should be in the clear
+    
+    // if the refresh token version does not match with the version in the database
+    // that means that the user is logged out
+    if(refreshVerify.refresh_token_version !== parseInt(USERS.get(accessToken.sub, "refreshTokenIncrement"))){
+      return {
+        userId: ""
+      }
+    }
+    const currentTime = Date.now();
+    // accesss token 
+    if(jwtVerify.exp < currentTime && refreshVerify.exp > currentTime){
+      // refresh the access token
+      const newAccessToken = await jwt.sign({
+        sub: githubUserData.email, // user id
+        exp: getExpTimestamp(ACCESS_TOKEN_EXP),
+      });
+      accessToken.set({
+        value: newAccessToken,
+        httpOnly: true,
+        maxAge: ACCESS_TOKEN_EXP,
+        secure: SECURE_FLAG,
+      });
+    }
+
     return {
       userId: jwtVerified.sub
     };
@@ -81,7 +96,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
     const githubUserResponse = await fetch("https://api.github.com/user", {
 			headers: {
 				Authorization: `Bearer ${tokens.accessToken}`
-			}
+			} 
 		});
     const githubUserData = await githubUserResponse.json();
     var refreshTokenVersion = -1;
@@ -136,7 +151,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
       secure: SECURE_FLAG,
       maxAge: REFRESH_TOKEN_EXP,
     });
-    return redirect("/accounts/test");
+    return redirect("/");
   } catch (e) {
     console.log("UH OH SPAGETTI OH : " + e);
   }
@@ -164,6 +179,16 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
   }
     return "Authed";
 })
-.get("/logout", async () => {
-  
+.get("/logout", async ({ jwt, cookie: {accessToken, refreshToken}}) => {
+  // increment the refresh token
+  if(!accessToken.value || !refreshToken.value) {
+    set.status = "Unauthorized";
+  }
+  const accessTokenVerified = await jwt.verify(accessToken.value);
+  const refreshVerify = await jwt.verify(accessToken.value);
+  if (!refreshVerify || !jwtVerify){
+    set.status = "Forbidden";
+  }
+  // after auth token runs out, that should invalidate all sessions
+  USERS.set(accessTokenVerified.sub, )
 });
