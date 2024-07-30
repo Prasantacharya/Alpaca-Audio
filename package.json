@@ -20,7 +20,8 @@
     "rss-parser": "3.13.0"
   },
   "scripts": {
-    "init-db": "source /usr/local/etc/ydb_env_unset && export ydb_dir=$PWD/yottadb && source /usr/local/etc/ydb_env_set",
+    "clean": "echo 'DONE'",
+    "databaseStart": "source /usr/local/etc/ydb_env_unset && export ydb_dir=$PWD/yottadb && source /usr/local/etc/ydb_env_set",
     "start-timestamp": "bun index.js"
   }
 }

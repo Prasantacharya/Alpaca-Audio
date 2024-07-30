@@ -10,6 +10,46 @@ const github = new GitHub(clientId, clientSecret);
 
 if(!SECURE_FLAG) console.log("WARNING - SECURE_FLAG in login.js set to false!")
 
+function getExpTimestamp(seconds) {
+  const currentTimeMillis = Date.now();
+  const secondsIntoMillis = seconds * 1000;
+  const expirationTimeMillis = currentTimeMillis + secondsIntoMillis;
+  
+  return Math.floor(expirationTimeMillis / 1000);
+}
+
+// plugin to handle auth 
+export const authPlugin = (app) => {
+  app.use(
+    jwt({
+      name: JWT_NAME,
+      secret: process.env.JWT_SECRET
+    })
+  )
+  .derive( async ({ jwt, cookie: {accessToken, refreshToken}}) => {
+    // first check refresh token
+    //    if its out of date
+    //      the user is logged out
+    //    if its in date and the access token is out of date
+    //       give them a new access token
+    //    if its in date and access token is in date
+    //       
+    //      
+    if(!accessToken.value || !refreshToken.value) {
+      set.status = "Unauthorized";
+    }
+    const jwtVerified = await jwt.verify(accessToken.value);
+    const refreshVerify = await jwt.verify(accessToken.value);
+    if (!refreshVerify || !jwtVerify){
+      set.status = "Forbidden";
+    }
+    // you should be in the clear
+    return {
+      userId: jwtVerified.sub
+    };
+  })
+}
+
 export const loginAndLogout = new Elysia({ prefix: "/accounts"})
 .use(jwt({
   name: JWT_NAME,
@@ -49,20 +89,24 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
     switch (USERS.defined(githubUserData.email)){
       case $DATA.DOES_NOT_EXIST:
         // sign up the user
+        console.log("USER DOES NOT EXIST YET");
         USERS.set(githubUserData.email, githubUserData.name);
         USERS.set(githubUserData.email, "refreshTokenIncrement", "0");
         refreshTokenVersion = 0;
         break;
       case $DATA.EXISTS_AND_NO_DESCENDANTS:
         // should be impossible
+        console.log("USER EXISTS, NO DATA");
         // if you are here, that means the refresh token increment is not there at a minimum
         break;
       case $DATA.HAS_DATA_AND_DESCENDANTS:
         // the user exists, and they 
+        console.log("USER EXISTS");
         refreshTokenVersion = parseInt(USERS.increment(githubUserData.email, "refreshTokenIncrement"));
         break;
       case $DATA.NO_DATA_AND_DESCENDANTS:
         // this should be impossible, flag error just in case
+        console.log("IDK WHAT HAPPENED HERE");
         break;
       default:
         // returns null, panic
@@ -71,7 +115,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
 
     const accessJWTToken = await jwt.sign({
       sub: githubUserData.email, // user id
-      exp: ACCESS_TOKEN_EXP,
+      exp: getExpTimestamp(ACCESS_TOKEN_EXP),
     }); 
     accessToken.set({
       value: accessJWTToken,
@@ -82,7 +126,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
 
     const refreshJWTToken = await jwt.sign({
       sub: githubUserData.email,
-      exp: REFRESH_TOKEN_EXP,
+      exp: getExpTimestamp(REFRESH_TOKEN_EXP),
       refresh_token_version : refreshTokenVersion
     });
 
@@ -92,7 +136,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
       secure: SECURE_FLAG,
       maxAge: REFRESH_TOKEN_EXP,
     });
-    return redirect("/");
+    return redirect("/accounts/test");
   } catch (e) {
     console.log("UH OH SPAGETTI OH : " + e);
   }
@@ -103,7 +147,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
     headers: {
       Location: "/",
     }
-  }).redirect("/", 301);
+  }).redirect("/accounts/test", 301);
 }, {
     query: t.Object({
         code: t.String(),
@@ -111,8 +155,14 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
     })
     // add afterHandle to edit the header
 })
-.get("/refresh", async () => {
-
+.get("/test", async ({jwt, cookie: {accessToken, refreshToken}}) => {
+  const profile = await jwt.verify(accessToken.value);
+  console.log("Access token - " + accessToken.value + " | profile: " + profile);
+  if (!profile){
+      set.status = 401;
+      return 'Unauthorized';
+  }
+    return "Authed";
 })
 .get("/logout", async () => {
   

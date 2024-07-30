@@ -8,9 +8,9 @@ import { loginAndLogout} from "./src/login-and-auth/login.js"
 const app = new Elysia()
   .use(html())
   .use(staticPlugin())
+  .use(loginAndLogout)
   .use(routes)
-  .use(htmxRoutes)
-  .use(loginAndLogout);
+  .use(htmxRoutes);
 // end oauth 
 
 app.listen(3000);

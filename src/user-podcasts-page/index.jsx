@@ -1,11 +1,18 @@
 import { AddPodcastCard } from "../ui-components/card.jsx";
+import { jwt } from '@elysiajs/jwt'
 
 /**
  * Main function for home page of app
  * @argument cookie - contains the user id that is set when they log in
  * @argument set - contains the CSRF token that is set on the server - compare with the SESSION to see if the user is who we think they are 
  */
-export const main = ({cookie: { user_Cookie }, set, error}) => {
+export const main = async ({cookie: { accessToken, refreshToken }, set}) => {
+    const profile = await jwt.verify(accessToken.value);
+    console.log("Access token - " + accessToken.value + " | profile: " + profile);
+    if (!profile){
+        set.status = 401;
+        return 'Unauthorized';
+    }
     console.log("USER COOKIE: " + user_Cookie.value);
     return (
         <html lang='en'>
