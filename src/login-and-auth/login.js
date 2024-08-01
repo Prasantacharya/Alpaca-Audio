@@ -4,7 +4,7 @@ import { USERS, $DATA } from "../database/database.js"
 import { jwt } from '@elysiajs/jwt';
 import {ACCESS_TOKEN_EXP, REFRESH_TOKEN_EXP, JWT_NAME, SECURE_FLAG} from "../../login-config.js"
 
-const clientId = process.env.GITHUB_CLIENT_ID // grab from env varaibles
+const clientId = process.env.GITHUB_CLIENT_ID // grab from env variables
 const clientSecret = process.env.GITHUB_CLIENT_SECRET // grab from env variables
 const github = new GitHub(clientId, clientSecret);
 
@@ -21,51 +21,56 @@ function getExpTimestamp(seconds) {
 }
 
 // plugin to handle auth 
-export const authPlugin = (app) => {
-  app.use(
+export const authPlugin = (app) => app.use(
     jwt({
       name: JWT_NAME,
       secret: process.env.JWT_SECRET
     })
   )
-  .derive( async ({ jwt, cookie: {accessToken, refreshToken}}) => {
-    if(!accessToken.value || !refreshToken.value) {
+  .derive( async ({ jwt, set, cookie: {accessToken, refreshToken}}) => {
+    // if the refresh token isnt there, then the user is logged out
+    if(!refreshToken.value) {
       set.status = "Unauthorized";
+      throw new Error("Refresh Token Missing");
     }
-    const jwtVerified = await jwt.verify(accessToken.value);
-    const refreshVerify = await jwt.verify(accessToken.value);
-    if (!refreshVerify || !jwtVerify){
+    const refreshVerify = await jwt.verify(refreshToken.value);
+    if (!refreshVerify){
       set.status = "Forbidden";
+      throw new Error("Refresh Token incorrect");
     }
-    
-    // if the refresh token version does not match with the version in the database
-    // that means that the user is logged out
-    if(refreshVerify.refresh_token_version !== parseInt(USERS.get(accessToken.sub, REFRESH_TOKEN_INCREMENT))){
-      return {
-        userId: ""
-      }
-    }
-    const currentTime = Date.now();
-    // accesss token 
-    if(jwtVerify.exp < currentTime && refreshVerify.exp > currentTime){
-      // refresh the access token
-      const newAccessToken = await jwt.sign({
-        sub: githubUserData.email, // user id
+    let accessTokenVerified;
+    if(!accessToken.value){
+      // generate a new access token if its expired
+      accessTokenVerified = {
+        sub: refreshVerify.sub, // user id
         exp: getExpTimestamp(ACCESS_TOKEN_EXP),
-      });
+      }
+      const accessJWTToken = await jwt.sign(accessTokenVerified);
       accessToken.set({
-        value: newAccessToken,
+        value: accessJWTToken,
         httpOnly: true,
         maxAge: ACCESS_TOKEN_EXP,
-        secure: SECURE_FLAG,
+        secure: SECURE_FLAG
       });
+    } else {
+      accessTokenVerified = await jwt.verify(accessToken.value);
+      if(!accessTokenVerified){
+        set.status = "Forbidden";
+        throw new Error("Access Token incorrect");
+      }
+    }
+    // if the refresh token version does not match with the version in the database
+    // that means that the user is logged out
+    if(refreshVerify.refresh_token_version !== parseInt(USERS.get(accessTokenVerified.sub, REFRESH_TOKEN_INCREMENT))){
+      return {
+        userId: "user signed out of all devices"
+      }
     }
 
     return {
-      userId: jwtVerified.sub
+      userId: accessTokenVerified.sub
     };
-  })
-}
+  });
 
 export const loginAndLogout = new Elysia({ prefix: "/accounts"})
 .use(jwt({
@@ -106,27 +111,16 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
     switch (USERS.defined(githubUserData.email)){
       case $DATA.DOES_NOT_EXIST:
         // sign up the user
-        console.log("USER DOES NOT EXIST YET");
         USERS.set(githubUserData.email, githubUserData.name);
         USERS.set(githubUserData.email, REFRESH_TOKEN_INCREMENT, "0");
         refreshTokenVersion = 0;
         break;
-      case $DATA.EXISTS_AND_NO_DESCENDANTS:
-        // should be impossible
-        console.log("USER EXISTS, NO DATA");
-        // if you are here, that means the refresh token increment is not there at a minimum
-        break;
       case $DATA.HAS_DATA_AND_DESCENDANTS:
         // the user exists, and they 
-        console.log("USER EXISTS");
         refreshTokenVersion = parseInt(USERS.increment(githubUserData.email, REFRESH_TOKEN_INCREMENT));
         break;
-      case $DATA.NO_DATA_AND_DESCENDANTS:
-        // this should be impossible, flag error just in case
-        console.log("IDK WHAT HAPPENED HERE");
-        break;
       default:
-        // returns null, panic
+        // error handling
         break;
     }
 
@@ -174,14 +168,14 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
 })
 .get("/test", async ({jwt, cookie: {accessToken, refreshToken}}) => {
   const profile = await jwt.verify(accessToken.value);
-  console.log("Access token - " + accessToken.value + " | profile: " + profile);
+  const refresh = await jwt.verify(refreshToken.value);
   if (!profile){
       set.status = 401;
       return 'Unauthorized';
   }
-    return "Authed";
+    return "Authed + " + profile.sub;
 })
-.get("/logout", async ({ jwt, cookie: {accessToken, refreshToken}}) => {
+.get("/logout", async ({ redirect, jwt, cookie: {accessToken, refreshToken}}) => {
   // increment the refresh token
   if(!accessToken.value || !refreshToken.value) {
     set.status = "Unauthorized";

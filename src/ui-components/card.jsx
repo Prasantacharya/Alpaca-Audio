@@ -1,6 +1,6 @@
 import { USERS } from "../database/database.js";
 
-export const PodcastCard = ({cookie: { user_Cookie }, set, error}) => {
+export const PodcastCard = () => {
     return (
         <div class="podcast-card">
         <img class="podcast-card-image" src={dbObj.podcastImg} />

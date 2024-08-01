@@ -1,5 +1,5 @@
 // TODO
-export const main = ({cookie: {jwt}}) => {
+export const welcomePage = () => {
     return (<div>
         TODO
     </div>);

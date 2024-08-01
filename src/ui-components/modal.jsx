@@ -20,7 +20,7 @@ export const loginModal = () => {
 export const searchModal = () => {
     return (
         <div id="modal">
-        <div class="modal-underlay" hx-on="click" hx-delete="/delete-modal" hx-swap="outerHTML" hx-target="#modal"></div>
+        <div class="modal-underlay" hx-on="click" hx-delete="/delete-element" hx-swap="outerHTML" hx-target="#modal"></div>
         <div class="modal-content">
           <h1>Add RSS Feed</h1>
             <input
@@ -33,7 +33,7 @@ export const searchModal = () => {
           <br />
           something here
           <br />
-          <button class="close" hx-on="click" hx-delete="/delete-modal" hx-swap="outerHTML" hx-target="#modal">Close</button>
+          <button class="close" hx-on="click" hx-delete="/delete-element" hx-swap="outerHTML" hx-target="#modal">Close</button>
         </div>
       </div>
     

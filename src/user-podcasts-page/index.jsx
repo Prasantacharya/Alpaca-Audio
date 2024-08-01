@@ -1,5 +1,4 @@
 import { AddPodcastCard } from "../ui-components/card.jsx";
-import { jwt } from '@elysiajs/jwt'
 
 export const main = async () => {
     return (
