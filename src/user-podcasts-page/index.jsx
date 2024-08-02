@@ -1,6 +1,6 @@
 import { AddPodcastCard } from "../ui-components/card.jsx";
 
-export const main = async () => {
+export const main = (userName) => {
     return (
         <html lang='en'>
             <head>
@@ -32,12 +32,12 @@ const Header = () => {
             <nav>
                 <h2><a href="/">TimeStamp</a></h2>
                 <div class="internal-links">
-                    <a href="/" class="active">Podcasts</a>
+                    <a href="/" class="active">Add RSS Feed</a>
                     <a href="/">Search</a>
                     <a href="/about">Notes</a>
                 </div>
                 <div class="outside-link-buttons">
-                    <a hx-on="click" hx-get="/login-modal" hx-target="body" hx-swap="beforeend">Login</a>
+                    <a hx-on="click" hx-get="/modal/login" hx-target="body" hx-swap="beforeend">Login</a>
                 </div>
             </nav>
         </header>
@@ -49,7 +49,7 @@ const Footer = () => {
         <footer>
             &copy; TimeStamp. All rights reserved.
             <div class="outside-link-buttons">
-                <a href="https://github.com/withastro/astro" target="_blank">
+                <a href="https://github.com/Prasantacharya/TimeStamped" target="_blank">
                     <svg
                         viewBox="0 0 16 16"
                         aria-hidden="true"

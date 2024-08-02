@@ -29,7 +29,9 @@ export const authPlugin = (app) => app.use(
     // if the refresh token isnt there, then the user is logged out
     if(!accessToken.value) {
       set.status = "Unauthorized";
-      throw new Error("Access Token Missing");
+      return {
+        userId: ""
+      }
     }
     const accessTokenVerified = await jwt.verify(accessToken.value);
     if (!accessTokenVerified){
@@ -132,6 +134,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
   // increment the refresh token
   if(!accessToken.value) {
     set.status = "Unauthorized";
+    return redirect("/")
   }
   const accessTokenVerified = await jwt.verify(accessToken.value);
   if (!accessTokenVerified){
