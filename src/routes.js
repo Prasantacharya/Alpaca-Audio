@@ -29,7 +29,9 @@ export const htmxRoutes = new Elysia()
     .use(authPlugin)
     .get("/modal/podcast", searchModal)
     .get("/modal/login", loginModal)
-    .post("/add-rss", async () => {
-
+    .post("/add-rss", async ({userId, body}) => {
+        if(userId === "") return ;
+        // grab the post from 
+        await parseRSSFeed()
     })
     .delete("/delete-element", () => {return ;});
