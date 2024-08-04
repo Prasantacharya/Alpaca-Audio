@@ -31,7 +31,7 @@ class notes {
         if(this.NOTES.defined(user, podcastEpisode) === $DATA.DOES_NOT_EXIST)
             return [];
         const epArr = [];
-        query = new mcursor(DB, {global: "notes", key: [user]}, {getdata: true});
+        let query = new mcursor(DB, {global: "notes", key: [user]}, {getdata: true});
         while((result = query.next()) !== null){
             epArr.push(result);
         }
