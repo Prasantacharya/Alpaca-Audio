@@ -1,4 +1,4 @@
-import {DB} from "./database";
+import {$DATA, DB} from "./database";
 import {mglobal} from "mg-dbx-napi";
 
 class Users {
@@ -9,20 +9,34 @@ class Users {
         this.Users = new mglobal(DB, "users");
     }
 
-    addUser(){
+    addUser(user, displayName = ""){
+        if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST)
+            return -1;
+        this.Users.set(user, displayName);
+    }
+
+    followRSS(user, url){
+        if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST)
+            return -1;
+        this.Users.set(user, url, "");
+    }
+
+    getUserRssFeeds(user){
+        if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST)
+            return -1;
 
     }
 
-    getUserRssFeeds(){
-
+    deleteUser(user){
+        if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST)
+            return -1;
+        this.Users.delete(user);
     }
 
-    deleteUser(){
-
-    }
-
-    removeUserRssFeed(){
-
+    removeUserRssFeed(user, url){
+        if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST)
+            return -1;
+        this.Users.delete(user, url);
     }
 }
 
@@ -33,7 +47,7 @@ class Users {
  * ^USERS : {
  *
  *      <user-email>: {
- *          preferred-name: "<From github>",
+ *          display-name: "<From github>",
  *          RSS : [
  *             <RSS-feed-url>: "",
  *              ... 

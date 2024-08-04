@@ -4,7 +4,7 @@ import {mglobal, mcursor} from "mg-dbx-napi";
 
 class feed {
     constructor(){
-        this.FEED = new mglobal(DB, "feed");
+        this.Feed = new mglobal(DB, "feed");
     }
 
     /**
@@ -13,9 +13,9 @@ class feed {
      * @param {optional} feedObj 
      */
     addFeed(url, feedObj){
-        if(this.FEED.defined(url) === $DATA.DOES_NOT_EXIST)
+        if(this.Feed.defined(url) === $DATA.DOES_NOT_EXIST)
             return -1;
-        this.FEED.set(url, )
+        this.Feed.set(url, )
     }
     
     /**
@@ -24,7 +24,7 @@ class feed {
      * @returns 
      */
     getFeed(url){
-        if(this.FEED.defined(url) === $DATA.DOES_NOT_EXIST)
+        if(this.Feed.defined(url) === $DATA.DOES_NOT_EXIST)
             return -1;
         let query = new mcursor(DB, {global: "feed", key: [url]}, {getdata: true});
         let result = query.next();
@@ -36,13 +36,13 @@ class feed {
         //grantee that the feed exists
         if(this.addFeed(url, podObj) === -1){
             Object.keys(podObj).forEach((key) => {
-                this.FEED.set(url, key, podObj[key]);
+                this.Feed.set(url, key, podObj[key]);
             });
         }
         // go in chronological order
         episodes.forEach((epUrl) => {
-            if(this.FEED.defined(url, "episodes", epUrl) === $DATA.DOES_NOT_EXIST){
-                this.FEED.set(url, "episodes", epUrl);
+            if(this.Feed.defined(url, "episodes", epUrl) === $DATA.DOES_NOT_EXIST){
+                this.Feed.set(url, "episodes", epUrl);
             } else {
                 // quit early if you have seen an episode before
                 // assumes latest to earliest ordering

@@ -3,7 +3,7 @@ import {mglobal, mcursor} from "mg-dbx-napi";
 
 class notes {
     constructor(){
-        this.NOTES = new mglobal(DB, "notes");
+        this.Notes = new mglobal(DB, "notes");
     }
 
     /**
@@ -15,9 +15,9 @@ class notes {
      * @returns -1 if the note cannot be added
      */
     addNote(user, podcastEpisode, timestamp, noteString){
-        if (this.NOTES.defined(user, podcastEpisode) === $DATA.DOES_NOT_EXIST)
+        if (this.Notes.defined(user, podcastEpisode) === $DATA.DOES_NOT_EXIST)
             return -1;
-        this.NOTES.set(user, podcastEpisode, timestamp, noteString);
+        this.Notes.set(user, podcastEpisode, timestamp, noteString);
         return 0;
     }
 
@@ -28,14 +28,14 @@ class notes {
      * @returns 
      */
     getEpisodeNotes(user, podcastEpisode){
-        if(this.NOTES.defined(user, podcastEpisode) === $DATA.DOES_NOT_EXIST)
+        if(this.Notes.defined(user, podcastEpisode) === $DATA.DOES_NOT_EXIST)
             return [];
         const epArr = [];
         let query = new mcursor(DB, {global: "notes", key: [user]}, {getdata: true});
         while((result = query.next()) !== null){
             epArr.push(result);
         }
-        return this.NOTES.get(user, podcastEpisode, timestamp);
+        return this.Notes.get(user, podcastEpisode, timestamp);
     }
 
     /**
@@ -46,9 +46,9 @@ class notes {
      * @returns -1 if the 
      */
     removeNote(user, podcastEpisode, timestamp){
-        if (this.NOTES.defined(user, podcastEpisode, timestamp) === $DATA.DOES_NOT_EXIST)
+        if (this.Notes.defined(user, podcastEpisode, timestamp) === $DATA.DOES_NOT_EXIST)
             return -1;
-        this.NOTES.delete(user, podcastEpisode, timestamp);
+        this.Notes.delete(user, podcastEpisode, timestamp);
         return 0;
     }
 
@@ -61,10 +61,10 @@ class notes {
      * @returns 
      */
     updateNote(user, podcastEpisode, timestamp, noteString){
-        if (this.NOTES.defined(user, podcastEpisode) === $DATA.DOES_NOT_EXIST){
+        if (this.Notes.defined(user, podcastEpisode) === $DATA.DOES_NOT_EXIST){
             return -1;
         }
-        this.NOTES.set(user, podcastEpisode, timestamp, noteString);
+        this.Notes.set(user, podcastEpisode, timestamp, noteString);
         return 0;
     }
 }
