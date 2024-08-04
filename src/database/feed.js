@@ -1,5 +1,5 @@
 import {DB, $DATA} from "./database";
-import {mglobal} from "mg-dbx-napi";
+import {mglobal, mcursor} from "mg-dbx-napi";
 
 
 class feed {
@@ -32,11 +32,24 @@ class feed {
         return result;
     }
 
-    updateFeed(url, feedObj){
+    updatePodcast(url, podObj, episodes){
         //grantee that the feed exists
-        if(this.addFeed(url, feedObj) === -1){
-            this.FEED.set(url, )
+        if(this.addFeed(url, podObj) === -1){
+            Object.keys(podObj).forEach((key) => {
+                this.FEED.set(url, key, podObj[key]);
+            });
         }
+        // go in chronological order
+        episodes.forEach((epUrl) => {
+            if(this.FEED.defined(url, "episodes", epUrl) === $DATA.DOES_NOT_EXIST){
+                this.FEED.set(url, "episodes", epUrl);
+            } else {
+                // quit early if you have seen an episode before
+                // assumes latest to earliest ordering
+                return 0;
+            }
+        });
+        // if you see an episode that 
         
     }
 }
