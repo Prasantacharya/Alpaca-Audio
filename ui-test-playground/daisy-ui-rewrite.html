@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+</head>
+<body class="h-screen flex flex-col">
+    <!-- Header -->
+    <div class="navbar bg-base-100">
+      <div class="navbar-start">
+        <a class="btn btn-ghost text-xl">Alpaca Audio</a>
+      </div>
+      <div class="navbar-end lg:flex">
+        <button class="btn btn-ghost">Feed</button>
+        <button class="btn btn-ghost">Notes</button>
+        <div class="divider divider-horizontal divider-neutral"></div>
+      <!-- -->
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" role="button" class="btn btn-ghost">
+            Themes
+          </div>
+          <div
+            tabindex="0"
+            class="card-compact card-compact dropdown-content bg-base-100 z-[1] mt-3 shadow">
+            <div class="join join-vertical">
+              <input
+                type="radio"
+                name="theme-buttons"
+                class="btn theme-controller join-item"
+                aria-label="Default"
+                value="default" />
+              <input
+                type="radio"
+                name="theme-buttons"
+                class="btn theme-controller join-item"
+                aria-label="Dracula"
+                value="dracula" />
+              <input
+                type="radio"
+                name="theme-buttons"
+                class="btn theme-controller join-item"
+                aria-label="Nord"
+                value="nord" />
+            </div>
+          </div>
+        </div>
+        <!-- -->
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+            <div class="w-10 rounded-full">
+              <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24"><path d="M12 2C6.579 2 2 6.579 2 12s4.579 10 10 10 10-4.579 10-10S17.421 2 12 2zm0 5c1.727 0 3 1.272 3 3s-1.273 3-3 3c-1.726 0-3-1.272-3-3s1.274-3 3-3zm-5.106 9.772c.897-1.32 2.393-2.2 4.106-2.2h2c1.714 0 3.209.88 4.106 2.2C15.828 18.14 14.015 19 12 19s-3.828-.86-5.106-2.228z"></path></svg>            </div>
+            </div>
+          <ul
+            tabindex="0"
+            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+            <li>
+              <a class="justify-between">
+                Profile
+                <span class="badge">New</span>
+              </a>
+            </li>
+            <li><a>Settings</a></li>
+            <li><a>Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="bg-base-300 flex flex-row flex-wrap justify-center gap-5 items-stretch">
+      <!-- card-compact component -->
+      <div class="card card-compact hover:scale-[1.03] ease-in-out duration-150 cursor-pointer my-5 bg-base-100 shadow-xl glass max-w-60">
+          <figure>
+            <img
+              src="https://static.libsyn.com/p/assets/3/4/5/f/345fbd6a253649c0/RevolutionsLogo_V2.jpg"
+              alt="Shoes" />
+          </figure>
+          <div class="card-body">
+            <h2 class="card-title">
+              Revolutions Podcast
+              <div class="badge badge-secondary">NEW</div>
+            </h2>
+            <p>A weekly podcasting exploring great political revolutions. Now: The Russian Revolution Next: ???</p>
+            <div class="card-actions justify-end">
+              <div class="badge badge-outline">370 episodes</div>
+            </div>
+          </div>
+      </div>
+
+      <div class="card card-compact hover:scale-[1.03] ease-in-out duration-150 cursor-pointer my-5 bg-base-100 shadow-xl glass max-w-60">
+          <figure>
+            <img
+              src="https://megaphone.imgix.net/podcasts/5febc1a4-a195-11ed-9af8-2397ed565c80/image/5de0abbf32eb98f60729e1b02cb6ba94.png?ixlib=rails-4.3.1&max-w=3000&max-h=3000&fit=crop&auto=format,compress"
+              />
+          </figure>
+          <div class="card-body">
+            <h2 class="card-title">
+              Advisory Opinions
+              <div class="badge badge-secondary">NEW</div>
+            </h2>
+            <p>Advisory Opinions is a new podcast from The Dispatch. Hosts David French and Sarah Isgur have a weekly conversation about the law, culture, and why it matters.</p>
+            <div class="card-actions justify-end">
+              <div class="badge badge-outline">458 episodes</div>
+            </div>
+          </div>
+      </div>
+      
+      <div class="card card-compact hover:scale-[1.03] ease-in-out duration-150 cursor-pointer my-5 bg-base-100 shadow-xl glass max-w-60">
+        <figure>
+          <img
+            src="http://www.dancarlin.com/graphics/DC_HH_iTunes.jpg"
+            alt="Shoes" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">
+            Dan Carlin's Hardcore History
+          </h2>
+          <p>In "Hardcore History" journalist and broadcaster Dan Carlin takes his "Martian", unorthodox way of thinking and applies it to the past. Was Alexander the Great as bad a person as Adolf Hitler? What would Apaches with modern weapons be like? ...</p>
+          <div class="card-actions justify-end">
+            <div class="badge badge-outline">370 episodes</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- add rss feed button -->
+      <div class="card card-compact hover:scale-[1.03] ease-in-out duration-150 cursor-pointer my-5 bg-base-100 shadow-xl glass max-w-60">
+        <figure>
+          <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          width="100%" 
+          height="100%" 
+          viewBox="0 0 24 24" 
+          class="fill-current"><path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4z"></path><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path></svg>
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">
+            Add RSS Feed
+          </h2>
+          <p>If you cant find a podcast you like, add the RSS Feed here</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="grow bg-base-300"></div>
+    <!-- Footer -->
+    <footer class="footer footer-center bg-base-200 text-base-content rounded p-10">
+      <nav class="grid grid-flow-col gap-4">
+        <a class="link link-hover">Podcasts</a>
+        <a class="link link-hover">Notes</a>
+        <a class="link link-hover">Profile</a>
+        <a class="link link-hover">About</a>
+      </nav>
+      <nav>
+        <div class="grid grid-flow-col gap-4">
+          <a class="h-12">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="100%" 
+              height="100%" 
+              viewBox="0 0 24 24"
+              class="fill-current">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12.026 2c-5.509 0-9.974 4.465-9.974 9.974 0 4.406 2.857 8.145 6.821 9.465.499.09.679-.217.679-.481 0-.237-.008-.865-.011-1.696-2.775.602-3.361-1.338-3.361-1.338-.452-1.152-1.107-1.459-1.107-1.459-.905-.619.069-.605.069-.605 1.002.07 1.527 1.028 1.527 1.028.89 1.524 2.336 1.084 2.902.829.091-.645.351-1.085.635-1.334-2.214-.251-4.542-1.107-4.542-4.93 0-1.087.389-1.979 1.024-2.675-.101-.253-.446-1.268.099-2.64 0 0 .837-.269 2.742 1.021a9.582 9.582 0 0 1 2.496-.336 9.554 9.554 0 0 1 2.496.336c1.906-1.291 2.742-1.021 2.742-1.021.545 1.372.203 2.387.099 2.64.64.696 1.024 1.587 1.024 2.675 0 3.833-2.33 4.675-4.552 4.922.355.308.675.916.675 1.846 0 1.334-.012 2.41-.012 2.737 0 .267.178.577.687.479C19.146 20.115 22 16.379 22 11.974 22 6.465 17.535 2 12.026 2z"></path>
+            </svg>
+          </a>
+        </div>
+      </nav>
+      <aside>
+        <p>Copyright © 2024 - All right reserved by ACME Industries Ltd</p>
+      </aside>
+    </footer>
+</body>
+</html>

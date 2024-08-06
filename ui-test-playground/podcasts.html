@@ -1,0 +1,320 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <style>
+            :root {
+                --nord0: #2e3440; /* used for background color */
+                --nord1: #3b4252; /* used for panels, modals, and status bars*/
+                --nord2: #434c5e; /* used for background if text highlighting a particular line*/
+                --nord3: #4c566a; /* highest contrast, swappable for nord2 if not enough contrast*/
+                
+                /* -- text colors */
+                --nord4: #d8dee9;  /* highlights for other UI elements */
+                --nord5: #e5e9f0;  /* highlights for other UI elements */
+                --nord6: #eceff4;  /* base text color */
+
+                /* -- blues -- */
+                --nord7: #8fbcbb; /* primary accent */
+                --nord8: #88c0d0; /* focus background color for buttons & text*/
+                --nord9: #81a1c1; /* */
+                --nord10: #5e81ac; /* */
+
+                /* -- other colors */
+                --nord11: #bf616a; /* error color */
+                --nord14: #a3be8c; /* success color */
+                /* ------------ */
+                
+                font-family: "Inter", sans-serif;
+                --text-c: var(--nord6);
+                --div-c: var(--nord1);
+                --bg-c: var(--nord0);
+                --accent-c: var(--nord7);
+                --error-c: var(--nord11);
+                --success-c: var(--nord14);
+            }
+            
+            body {
+                margin: 0;
+                background-color: var(--nord0);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            hr {
+                margin-top: 2px;
+                margin-bottom: 2px;
+                height: 2px;
+                background-color: var(--nord7);
+                overflow: visible;
+                text-align: center;
+                border:none;
+            }
+
+            a {
+               color: var(--nord8); 
+            }
+
+        /* -- nav bar css -- */
+            header {
+                margin: 0;
+                padding: 0 1em;
+                background: var(--nord1);
+            }
+
+            h1 {
+                font-size:2em;
+                color:var(--nord4);
+                margin: .2rem;
+            }
+
+            h2 {
+                margin: 0;
+                font-size: 1em;
+            }
+        
+            nav {
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
+            }
+
+            nav a {
+                padding: 1em 0.5em;
+                color: var(--nord6);
+                border-bottom: 4px solid transparent;
+                text-decoration: none;
+            }
+            nav a.active {
+                text-decoration: none;
+                border-bottom-color: var(--nord7);
+            }
+            .outside-link-buttons{
+                display: flex;
+                justify-content: center;
+                margin-top: 1rem;
+                gap: 1rem;
+            }
+            .outside-link-buttons a {
+                color: var(--nord8)
+            }
+            @media (max-width: 720px) {
+                .outside-link-button {
+                    display: none;
+                }
+            }
+
+            .contentArea {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                flex: 1;
+            }
+            button {
+                background-color: transparent;
+                border: none;
+                margin: 0;
+                padding: 0;
+                text-align: inherit;
+                font: inherit;
+                border-radius: 0;
+                appearance: none;
+            }
+
+            /* podcast card css */
+            
+            .podcast-area {
+                width: 50rem;
+                margin-top: 2rem;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;;
+            }
+
+            .podcast-card {
+                display: flex;
+                flex-direction:column;
+                max-width: 15em;
+                color: var(--nord6);
+                transition: all .2s ease-in-out; 
+                border-radius: 10px 10px 10px 10px;
+                margin: 5px;
+            }
+
+            .podcast-card:hover {
+                outline: 2px var(--accent-c) solid;
+                outline-offset: -1px;
+                cursor: pointer;
+                transform: scale(102%);
+            }
+
+            .podcast-card:active {
+                outline: 4px var(--nord10) solid;
+                outline-offset: -1px;
+                transform: scale(105%);
+                cursor: pointer;
+
+            }
+
+            .podcast-card-header {
+                flex-wrap: wrap;
+                max-width: inherit;
+            }
+
+            .podcast-card-image {
+                border-radius: 10px 10px 0 0;
+            }
+
+            .podcast-card-body {
+                background-color: var(--nord1);
+                padding: 5px;
+                border-radius: 0px 0px 10px 10px;
+            }
+
+            .podcast-card:hover .podcast-card-body{
+                background-color: var(--nord2);
+            }
+
+            .podcast-card:active .podcast-card-body{
+                background-color: var(--nord3);
+            }
+
+            /* icon styling*/
+            .icon {
+                font-size: 17pt;
+                color: var(--nord9);
+                transition: all .2s ease-in-out; 
+            }
+
+            .icon:hover {
+                font-size: 20pt;
+            }
+            
+            .icon:active {
+                color: var(--nord7);
+            }
+            /* footer styling*/
+            footer {
+                padding: 2em 1em 6em 1em;
+                background-color: var(--nord2);
+                color: var(--nord4);
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+            }
+            .login {
+                display: flex;
+                justify-content: center;
+                gap: 1em;
+                margin-top: 1em;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <h2><a href="/">TimeStamp</a></h2>
+                <div class="internal-links">
+                    <a href="card-test.html">Podcasts</a>
+                    <a href="/blog" class="active">Search</a>
+                    <a href="/about">Notes</a>
+                </div>
+                <div class="outside-link-buttons">
+                    <a href="/login">Login</a>
+                </div>
+            </nav>
+        </header>
+        <div class="contentArea">
+            <div class="podcast-area">
+                <div class="podcast-card">
+                    <div class="podcast-card-image">
+                        <svg style="fill: var(--nord14); width: 100%; background-color: var(--nord1); border-radius: inherit;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4z"></path><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path></svg>
+                    </div>
+                    <div class="podcast-card-body">
+                        <hr>
+                        <div class="podcast-card-header">
+                            <b>Add New Podcast</b>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+                <div class="podcast-card">
+                    <img class="podcast-card-image" src="http://www.dancarlin.com/graphics/DC_HH_iTunes.jpg">
+                    <div class="podcast-card-body">
+                        <div class="podcast-card-header">
+                            <b>Dan Carlin - HardCore History</b>
+                        </div>
+                        <hr>
+                        <div>
+                            <small><i>15 episodes</i></small>
+                        </div>
+                    </div>
+                </div>
+                <div class="podcast-card">
+                    <img class="podcast-card-image" src="http://www.dancarlin.com/graphics/DC_HH_iTunes.jpg">
+                    <div class="podcast-card-body">
+                        <div class="podcast-card-header">
+                            <b>Dan Carlin - HardCore History</b>
+                        </div>
+                        <hr>
+                        <div>
+                            <small><i>15 episodes</i></small>
+                        </div>
+                    </div>
+                </div>
+                <div class="podcast-card">
+                    <img class="podcast-card-image" src="http://www.dancarlin.com/graphics/DC_HH_iTunes.jpg">
+                    <div class="podcast-card-body">
+                        <div class="podcast-card-header">
+                            <b>Dan Carlin - HardCore History</b>
+                        </div>
+                        <hr>
+                        <div>
+                            <small><i>15 episodes</i></small>
+                        </div>
+                    </div>
+                </div>
+                <div class="podcast-card">
+                    <img class="podcast-card-image" src="http://www.dancarlin.com/graphics/DC_HH_iTunes.jpg">
+                    <div class="podcast-card-body">
+                        <div class="podcast-card-header">
+                            <b>Dan Carlin - HardCore History</b>
+                        </div>
+                        <hr>
+                        <div>
+                            <small><i>15 episodes</i></small>
+                        </div>
+                    </div>
+                </div>
+                <div class="podcast-card">
+                    <img class="podcast-card-image" src="http://www.dancarlin.com/graphics/DC_HH_iTunes.jpg">
+                    <div class="podcast-card-body">
+                        <div class="podcast-card-header">
+                            <b>Dan Carlin - HardCore History</b>
+                        </div>
+                        <hr>
+                        <div>
+                            <small><i>15 episodes</i></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2024 Your name here. All rights reserved.
+            <div class="outside-link-buttons">
+                
+                <a href="https://github.com/withastro/astro" target="_blank">
+                    <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github"
+                        ><path
+                            fill="currentColor"
+                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+                        ></path></svg>
+                </a>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,330 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            /*color definitions*/
+            :root {
+                --nord0: #2e3440; /* used for background color */
+                --nord1: #3b4252; /* used for pannels, modals, and status bars*/
+                --nord2: #434c5e; /* used for background if text highlighting a particular line*/
+                --nord3: #4c566a; /* highest contrast, swapable for nord2 if not enough contrast*/
+                
+                /* -- text colors */
+                --nord4: #d8dee9;  /* highlights for other UI elements */
+                --nord5: #e5e9f0;  /* highlights for other UI elements */
+                --nord6: #eceff4;  /* base text color */
+
+                /* -- blues -- */
+                --nord7: #8fbcbb; /* primary accent */
+                --nord8: #88c0d0; /* focus background color for buttons & text*/
+                --nord9: #81a1c1; /* */
+                --nord10: #5e81ac; /* */
+
+                /* -- other colors */
+                --nord11: #bf616a; /* error color */
+                --nord14: #a3be8c; /* success color */
+                /* ------------ */
+                
+                font-family: "Inter", sans-serif;
+                --text-c: var(--nord6);
+                --div-c: var(--nord1);
+                --bg-c: var(--nord0);
+                --accent-c: var(--nord7);
+                --error-c: var(--nord11);
+                --success-c: var(--nord14);
+            }
+            
+            body {
+                margin: 0;
+                background-color: var(--nord0);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            hr {
+                margin-top: 2px;
+                margin-bottom: 2px;
+                height: 2px;
+                background-color: var(--accent-c);
+                overflow: visible;
+                text-align: center;
+                border:none;
+            }
+
+            a {
+               color: var(--nord8); 
+            }
+
+        /* -- nav bar css -- */
+            header {
+                margin: 0;
+                padding: 0 1em;
+                background: var(--nord1);
+            }
+
+            h1 {
+                font-size:2em;
+                color:var(--nord4);
+                margin: .2rem;
+            }
+
+            h2 {
+                margin: 0;
+                font-size: 1em;
+            }
+        
+            nav {
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
+            }
+
+            nav a {
+                padding: 1em 0.5em;
+                color: var(--nord6);
+                border-bottom: 4px solid transparent;
+                text-decoration: none;
+            }
+            nav a.active {
+                text-decoration: none;
+                border-bottom-color: var(--nord7);
+            }
+            .outside-link-buttons{
+                display: flex;
+                justify-content: center;
+                margin-top: 1rem;
+                gap: 1rem;
+            }
+            .outside-link-buttons a {
+                color: var(--nord8)
+            }
+            @media (max-width: 720px) {
+                .outside-link-button {
+                    display: none;
+                }
+            }
+            /* end of nav bar css */
+
+            .contentArea {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                flex: 1;
+            }
+            button {
+                background-color: transparent;
+                border: none;
+                margin: 0;
+                padding: 0;
+                text-align: inherit;
+                font: inherit;
+                border-radius: 0;
+                appearance: none;
+            }
+            .card{
+                display: flex;
+                flex-direction: row;
+                max-height: 15em;
+                max-width: 45em;
+                padding-right: 10px;
+                margin: 7px;
+                background-color: var(--nord1);
+                color: var(--nord6);
+                border-radius: 1em;
+                transition: all .2s ease-in-out; 
+            }   
+
+            .card:hover {
+                outline: 2px var(--accent-c) solid;
+                background-color: var(--nord2);
+                color: var(--nord5);
+                outline-offset: -1px;
+                cursor: pointer;
+                transform: scale(102%);
+            }
+
+            .card:active {
+                outline: 4px var(--nord10) solid;
+                background-color: var(--nord3);
+                color: var(--nord4);
+                outline-offset: -1px;
+                transform: scale(104%);
+                cursor: pointer;
+            }
+
+            .card-header {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                margin-top:10px;
+                transition: all .2s ease-in-out; 
+            } 
+
+            .card-header:hover {
+                transform: scale(102%);
+            } 
+
+            .card-body {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 5px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .card-image {
+                max-width: 150px;
+                margin-right: 10px;
+                border-radius: 1em 0 0 1em;
+                /*outline: 2px var(--accent-c) solid;*/
+            }
+
+            .card-footer {
+                margin-top: auto;
+            }
+            
+            .icon {
+                font-size: 17pt;
+                color: var(--nord9);
+                transition: all .2s ease-in-out; 
+            }
+
+            .icon:hover {
+                font-size: 20pt;
+            }
+            
+            .icon:active {
+                color: var(--nord7);
+            }
+            /* -- pagination css -- */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                margin: 1rem 1rem;
+            }
+            .nav-page {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+            }
+
+            .nav-page > li {
+                margin: 0 1px;
+                padding-bottom: 2px;
+                border-bottom:2px var(--nord9) solid;
+            }
+            .nav-page > li:first-child, li:last-child{
+                border-bottom:inherit;
+            }
+            /* -- end of pagination css -- */
+            /* -- footer css */
+            footer {
+                padding: 2em 1em 6em 1em;
+                background-color: var(--nord2);
+                color: var(--nord4);
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <h2><a href="/">TimeStamp</a></h2>
+                <div class="internal-links">
+                    <a href="/" class="active">Podcasts</a>
+                    <a href="podcasts.html">Search</a>
+                    <a href="/about">Notes</a>
+                </div>
+                <div class="outside-link-buttons">
+                    <a href="/login">Login</a>
+                </div>
+            </nav>
+        </header>
+        <div class="contentArea">
+            <div><h1>Dan Carlin's Hardcore History</h1></div>
+            <button class="card">
+                <img class="card-image" src="https://static.libsyn.com/p/assets/7/9/1/7/7917e6da4a5833e9e55e3c100dce7605/dchha71_Mania_for_Subjugation.jpg">
+                <div class="card-body">
+                    <div class="card-header">
+                        <!-- same for this, switch out for font and <i> tag -->
+                        <a href="http://dts.podtrac.com/redirect.mp3/traffic.libsyn.com/dancarlinhh/dchha66_Supernova_in_the_East_V.mp3"><i class="bx bx-play icon" name='play'></i></a>
+                        <b>Show 71 - Mania for Subjugation</b>
+                    </div>
+                    <hr>
+                    <div class="card-body">
+                        <p>What's the recipe for making a historically world-class apex predator? In the case of Alexander the Great, it might be the three Ns: Nature, Nurture, and Nepotism.
+                        </p>
+                    </div>
+                    <div class="card-footer"><small><i>Fri, 07 Jun 2024 12:14:53 PST</i></small></div>
+                </div>
+    
+            </button>
+            <button class="card">
+                <img class="card-image" src="">
+                <div class="card-body">
+                    <div class="card-header">
+                        <!-- same for this, switch out for font and <i> tag -->
+                        <a href="http://dts.podtrac.com/redirect.mp3/traffic.libsyn.com/dancarlinhh/dchha66_Supernova_in_the_East_V.mp3"><i class="bx bx-play icon"></i></a>
+                        <b>Show 66 - Supernova in the East V</b>
+                    </div>
+                    <hr>
+                    <div class="card-body">
+                        <p>Can suicidal bravery and fanatical determination make up for material, industrial and numerical insufficiency? As the Asia-Pacific conflict turns against the Japanese these questions are put to the test. The results are nightmarish.
+                        </p>
+                    </div>
+                    <div class="card-footer"><small><i>Fri, 13 Nov 2020 17:08:26 PST</i></small></div>
+                </div>
+    
+            </button>
+            <button class="card">
+                <img class="card-image" src="https://static.libsyn.com/p/assets/8/9/1/9/8919a1a7b5b0fb5c27a2322813b393ee/HH-66-Supernova-in-the-East-5.jpg">
+                <div class="card-body">
+                    <div class="card-header">
+                        <!-- same for this, switch out for font and <i> tag -->
+                        <a href="http://dts.podtrac.com/redirect.mp3/traffic.libsyn.com/dancarlinhh/dchha66_Supernova_in_the_East_V.mp3"><i class="bx bx-play icon"></i></a>
+                        <b>Show 66 - Supernova in the East V</b>
+                    </div>
+                    <hr>
+                    <div class="card-body">
+                        <p>Can suicidal bravery and fanatical determination make up for material, industrial and numerical insufficiency? As the Asia-Pacific conflict turns against the Japanese these questions are put to the test. The results are nightmarish.
+                        </p>
+                    </div>
+                    <div class="card-footer"><small><i>Fri, 13 Nov 2020 17:08:26 PST</i></small></div>
+                </div>
+    
+            </button>
+            
+        </div>
+        <nav class="pagination">
+            <ul class="nav-page">
+                <li :first><a href=""><span aria-hidden="true">«</span><span class="visuallyhidden"> previous</span></a></li>
+                <li><a href=""><span class="visuallyhidden">page </span>1</a></li>
+                <li><a href="" aria-current="page"><span class="visuallyhidden">page </span>2</a></li>
+                <li><a href=""><span class="visuallyhidden">page </span>3</a></li>
+                <li><a href=""><span class="visuallyhidden">page </span>4</a></li>
+                <li><a href=""><span class="visuallyhidden">next </span><span aria-hidden="true">»</span></a></li>
+              </ul>
+        </nav>
+        <footer>
+            &copy; 2024 Your name here. All rights reserved.
+            <div class="outside-link-buttons">
+                <a href="https://github.com/withastro/astro" target="_blank">
+                    <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github"
+                        ><path
+                            fill="currentColor"
+                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+                        ></path></svg>
+                </a>
+            </div>
+        </footer>
+    </body>
+</html>

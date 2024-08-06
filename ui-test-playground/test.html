@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <div x-data="{something: 'hi there'}">
+            <div x-text="something"></div>
+            <div>
+                <button x-data @click="$store.ticker.startTimer()">START TIMER</button>
+                <button x-data @click="$store.ticker.stopTimer()">STOP TIMER</button>
+                <span x-data style="background-color: yellow; font-size:50pt;" x-text="$store.ticker.time"></span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('alpine:init', function() {
+            Alpine.store("ticker", ({
+                time: 0,
+                tickerId: -1,
+                startTimer() {
+                    if(this.tickerId != -1)
+                        return;
+                    this.tickerId = setInterval(() => {
+                    this.time ++;
+                  }, 1000);
+                },
+                stopTimer() {
+                    clearInterval(this.tickerId);
+                    this.tickerId = -1;
+                }
+            }));
+        });
+    
+    </script>    
+    
+</body>
+</html>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('audioPlayer', () => ({
+        isPlaying: false,
+        currentTime: '00:00:00',
+        init() {
+          console.log('init')
+          this.$refs.audio.ontimeupdate = () => this.timeUpdated();
+          this.$watch('currentTime', (value, oldValue) => {
+             this.dispatchCurrentTime(this.currentTime, this.currentTimeRaw);
+          })
+          this.$watch('isPlaying', (value) => {
+            if (value === true) {
+              this.$refs.audio.play()
+            } else{
+              this.$refs.audio.pause()
+            }
+          })
+        },
+        timeUpdated() {
+          let totalSeconds = this.$refs.audio.currentTime
+          let hours = Math.floor(totalSeconds / 3600);
+          totalSeconds %= 3600;
+          let minutes = Math.floor(totalSeconds / 60);
+          let seconds = totalSeconds % 60;
+          this.currentTime =  this.padTo2Digits(hours) + ':' + this.padTo2Digits(minutes) + ':' + this.padTo2Digits(Math.round(seconds))
+          this.currentTimeRaw = totalSeconds
+        },
+        padTo2Digits(num) {
+          return num.toString().padStart(2, '0');
+        },
+        dispatchCurrentTime(currentTime, currentTimeRaw) { 
+          window.dispatchEvent(new CustomEvent('set-current-time', {detail: {currentTime, currentTimeRaw}}));
+        },
+        toggle() {
+          if (this.isPlaying) {
+           this.isPlaying = false
+          } else {
+            this.isPlaying = true
+          }
+        },
+        events: {
+          ['@keyup.space.window']() {
+            this.toggle()
+          },
+        },
+      }))
+      Alpine.data('audioRow', (data) => ({
+        start: null,
+        end: null,
+        isActive: false,
+        init() {
+          this.start = Number(this.removeColons(data.start))
+          this.end = Number(this.removeColons(data.end))
+        },
+        events: {
+          ['@set-current-time.window'](e) {
+            this.setActive(e.detail.currentTime, e.detail.currentTimeRaw)
+          },
+        },
+        between(x, min, max) {
+          return x >= min && x <= max;
+        },
+        removeColons(str) {
+          return str.replace(/\:/g, "");
+        },
+        setActive(currentTime, currentTimeRaw) {
+          let rawCurrent = Number(this.removeColons(currentTime))
+          if (this.between(rawCurrent, this.start, this.end)) {
+            this.isActive = true
+          } else {
+            this.isActive = false
+          }
+        }
+      }))
+    })
+  </script>
+  <div class="w-full h-screen flex flex-col items-center justify-center flex-wrap">
+    <div x-data="audioPlayer()" x-bind="events" class="w-full mb-8">
+      <div class="flex flex-col w-full mx-auto max-w-lg">
+        <h2 class="font-bold mb-2">I am master component. My currentTime is <span x-text="currentTime" class="text-blue-500"></span></h2>
+        <audio controls x-ref="audio" muted>
+          <source src="https://cdn.wapka.org/0082rm/4421229eb62d1694cde5cd77fc89300b/lonteku.mp3">
+        </audio>
+      </div>
+    </div>
+  
+    <div class="w-full mx-auto max-w-lg m-2">
+      <h2 class="font-bold">We are slave components listening to dispatches from master... </h2>
+      <div class="flex flex-col divide-y border">
+        <div class="p-2" x-data="audioRow({ start: '00:00:03', end: '00:00:11'})" x-bind="events" x-bind:class="isActive ? 'bg-blue-100' : ''">line 1</div>
+        <div class="p-2" x-data="audioRow({ start: '00:00:12', end: '00:00:25'})" x-bind="events" x-bind:class="isActive ? 'bg-blue-100' : ''">line 2</div>
+        <div class="p-2" x-data="audioRow({ start: '00:01:03', end: '00:01:23'})" x-bind="events" x-bind:class="isActive ? 'bg-blue-100' : ''">line 3</div>
+      </div>
+    </div>
+  </div>

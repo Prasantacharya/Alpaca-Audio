@@ -1,0 +1,333 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        /** basic html styling */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 5px;
+        }
+
+        /*color definitions*/
+        :root {
+            --white-c: #E1E1E1;
+            --black-c: #131515;
+            --grey-c: #2D2F30;
+            --light-grey-c: #7c8285;
+            --accent-c: #ffa476;
+            --dark-accent-c: #d17150;
+            --button-c: #7ac9f0;
+            --button-accent-c: #0073e6;
+            background-color: var(--light-grey-c);
+            font-family: "Inter", sans-serif;
+        }
+
+        hr {
+            margin-top: 2px;
+            margin-bottom: 2px;
+            height: 2px;
+            background-color: var(--accent-c);
+            overflow: visible;
+            text-align: center;
+            border: none;
+        }
+
+        ul {
+            list-style: none;
+            display: inline-flex;
+            gap: 0.5rem;
+        }
+
+        a {
+            color: var(--main-c);
+        }
+
+        .searchArea {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* -- New stuff here -- */
+
+        .audio-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            overflow: scroll;
+        }
+
+        .audio-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--grey-c);
+            height: 90%;
+            width: 90%;
+            border-radius: 1rem;
+        }
+
+        .audio-image {
+            max-width: 50%;
+            max-height: 50%;
+            margin-top: 2rem;
+            background-color: var(--black-c);
+            border-radius: inherit;
+        }
+
+        .audio-player {
+            width: inherit;
+            height: auto;
+            position: relative;
+            margin: 1em;
+        }
+
+        .slider {
+            display: flex;
+            height: 15px;
+            width: 100%;
+        }
+
+        .annotation-bar {
+            display: flex;
+            height: 15px;
+            width: 100%;
+        }
+
+        .audio-timeline {
+            appearance: none;
+            width: 100%;
+            background-color: var(--light-grey-c);
+            border-radius: 5px;
+        }
+
+        input[type="range"]::-moz-range-progress {
+            background-color: var(--button-c);
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        input[type="range"]::-moz-range-track {
+            background-color: var(--light-grey-c);
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            background-color: var(--button-c);
+            border: 1px var(--button-c) solid;
+            opacity: 0;
+            appearance: none;
+            outline: none;
+        }
+
+        .audio-tag {
+            position: relative;
+            background-color: var(--accent-c);
+            outline: none;
+            width: 0.5%;
+            bottom: 15px;
+            border-radius: 2px;
+            z-index: 2;
+        }
+
+        .audio-controls .icon {
+            position: relative;
+            margin-top: 0.5rem;
+            font-size: 25pt;
+        }
+
+        /*Something */
+        .active {
+            outline: 2px var(--button-accent-c) solid;
+            background-color: var(--button-c);
+            border-radius: 5px;
+            padding: 5px;
+            color: var(--black-c)
+        }
+
+        .inactive {
+            outline: 2px var(--black-c) solid;
+            background-color: var(--grey-c);
+            border-radius: 5px;
+            padding: 5px;
+            color: var(--white-c);
+        }
+
+        .notepad {
+            margin: 1rem;
+            height: 100%;
+        }
+
+        .time {
+            color: var(--white-c);
+            display:inline-flex;
+            width: 100%;
+            justify-content:space-between
+        }
+
+        /* -- end of new stuff -- */
+
+        /* icon styling*/
+        .icon {
+            font-size: 17pt;
+            color: var(--button-c);
+            transition: all .2s ease-in-out;
+        }
+
+        .icon:hover {
+            font-size: 30pt;
+        }
+
+        .icon:active {
+            color: var(--button-accent-c);
+        }
+
+        button {
+            appearance: none;
+            background: transparent;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="audio-container">
+        <div class="audio-card" x-data="audioData">
+            <image class="audio-image"
+                src="https://static.libsyn.com/p/assets/7/9/1/7/7917e6da4a5833e9e55e3c100dce7605/dchha71_Mania_for_Subjugation.jpg" alt="">
+            <div class="audio-player">
+                <div class="slider">
+                    <input type="range" class="audio-timeline" x-ref="seekSlider"></input>
+                </div>
+                <div class="annotation-bar">
+                    <template x-for="ts in timeStamps">
+                        <div class="audio-tag" :style="{left: ts}"></div>
+                    </template>
+                </div>
+                <div class="time">
+                    <div x-data x-text="currentTime"></div>
+                    <div x-text="maxTime"></div>
+                </div>
+            </div>
+            <div class="audio-controls">
+                <button x-data @click="r10Sec()" x-ref="rewind-icon"><i
+                        class="bx bx-rewind bx-lg icon"></i></button>
+                <button x-data @click="togglePlay()" x-ref="play-icon"><i
+                        class="bx bx-play bx-lg icon"></i></button>
+                <button x-data @click="ff10Sec()" x-ref="fast-forward-icon"><i
+                        class="bx bx-fast-forward bx-lg icon"></i></button>
+                <audio
+                    src="https://dts.podtrac.com/redirect.mp3/traffic.libsyn.com/dancarlinhh/dchha71_Mania_for_Subjugation.mp3"
+                    preload="metadata" x-ref="audio"></audio>
+            </div>
+            <button @click="addNote()" x-ref="add-note">
+                <i class='bx bxs-note bx-lg icon'></i>
+            </button>
+        </div>
+    </div>
+    <script>
+        //alpine rewrite: functions
+        document.addEventListener('alpine:init', function () {
+            Alpine.data('audioData', () => ({
+                timeStamps: [],
+                currentTime: "--:--",
+                maxTime: "--:--",
+                currentTimeRaw: 0,
+                seeking: false,
+                init(){
+                    this.$refs.audio.ontimeupdate = () => {
+                        this.convertToTimeStamp();
+                        // if the user is seeking, you don't want to update the slider
+                        if(!this.seeking) this.$refs.seekSlider.value = this.currentTimeRaw;
+                    }
+                    this.$refs.audio.onloadedmetadata = () => this.loadMetaData();
+                    this.$refs.seekSlider.onchange = () => this.seek();
+                    this.$refs.seekSlider.oninput = () => this.seeking = true;
+                    this.$refs.seekSlider.value = 0;
+                },
+                /**
+                 * called when audio loads in the metadata for file
+                 * initializes the `currentTime` and `maxTime` state variables with '00:00' and the audio file duration respectively
+                 */
+                loadMetaData(){
+                    this.currentTime = "00:00";
+                    this.maxTime = this.convertToTimeStamp(this.$refs.audio.duration);
+                    // set the slider's value to be the same as the audio file
+                    // this way, seeking is super simple, just set the time stamp equal to the slider
+                    this.$refs.seekSlider.max = this.$refs.audio.duration;
+                },
+                togglePlay() {
+                    this.playAudio = !this.playAudio;
+                    switch (this.playAudio) {
+                        case true:
+                            this.$refs.audio.play();
+                            break;
+                        case false:
+                            this.$refs.audio.pause();
+                            break;
+                    }
+                },
+                /**
+                * Creates and sets timestamps 
+                * @params {int} optional
+                * @returns 0 if the current time is set
+                */
+                convertToTimeStamp(time){
+                    // update the time stamp
+                    var totalSeconds;
+                    if(time){
+                        totalSeconds = time;
+                    } else {
+                        totalSeconds = this.$refs.audio.currentTime;
+                    }
+                    tempTime = "";
+                    let hours = Math.floor(totalSeconds / 3600);
+                    // helper lambda
+                    const paddingZero = (num) => num.toString().padStart(2,'0');
+                    // add hours
+                    tempTime += (hours > 0 ? paddingZero(hours) + ":" : "");
+                    totalSeconds %= 3600;
+                    let minutes = Math.floor(totalSeconds / 60);
+                    // minutes
+                    tempTime += paddingZero(minutes) + ":";
+                    let seconds = Math.floor(totalSeconds % 60);
+                    // seconds
+                    tempTime += paddingZero(seconds);
+                    // if time is supplied, this is converting a random time, not the currentTime
+                    if(time){
+                        return tempTime;
+                    } else {
+                        this.currentTimeRaw = totalSeconds;
+                        this.currentTime = tempTime;
+                    }
+                    return 0;
+                    // update the seek slider
+                },
+                seek(){
+                    this.seeking = false;
+                    this.$refs.audio.currentTime = this.$refs.seekSlider.value; 
+                    this.convertToTimeStamp();
+                },
+                r10Sec() {
+                    this.$refs.audio.currentTime -= 10;
+                },
+                ff10Sec() {
+                    this.$refs.audio.currentTime += 10;
+                },
+                addNote(){
+                    this.timeStamps.push(((this.currentTimeRaw / this.$refs.audio.duration) * 100) + "%");
+                }
+            }));
+        });
+    </script>
+</body>
