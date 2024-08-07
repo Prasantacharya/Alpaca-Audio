@@ -30,12 +30,13 @@ class notes {
     getEpisodeNotes(user, podcastEpisode){
         if(this.Notes.defined(user, podcastEpisode) === $DATA.DOES_NOT_EXIST)
             return [];
-        const epArr = [];
-        let query = new mcursor(DB, {global: "notes", key: [user]}, {getdata: true});
-        while((result = query.next()) !== null){
-            epArr.push(result);
+        const epArr = {};
+        let result;
+        let query = new mcursor(DB, {global: "notes", key: [user, podcastEpisode]}, {multilevel: true, getdata: true});
+        while((result = query.next()) !== null && result.key[1] === podcastEpisode){
+            epArr[result.key[2]] = result.data;
         }
-        return this.Notes.get(user, podcastEpisode, timestamp);
+        return epArr;
     }
 
     /**

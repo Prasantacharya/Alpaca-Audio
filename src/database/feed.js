@@ -15,7 +15,10 @@ class feed {
     addFeed(url, feedObj){
         if(this.Feed.defined(url) === $DATA.DOES_NOT_EXIST)
             return -1;
-        this.Feed.set(url, )
+        this.Feed.set(url, "title", feedObj.title);
+        this.Feed.set(url, "description", feedObj.description);
+        this.Feed.set(url, "image", feedObj.image);
+        this.Feed.set(url, "pubDate", feedObj.pubDate);
     }
     
     /**
@@ -26,29 +29,27 @@ class feed {
     getFeed(url){
         if(this.Feed.defined(url) === $DATA.DOES_NOT_EXIST)
             return -1;
-        let query = new mcursor(DB, {global: "feed", key: [url]}, {getdata: true});
-        let result = query.next();
-        if(result === null) return -1;
-        return result;
+        return {
+            title: this.Feed.get(url, "title"),
+            description: this.Feed.get(url, "description"),
+            image: this.Feed.get(url, "image"),
+            pubDate: this.Feed.get(url, "pubDate"),
+        };
     }
 
-    updatePodcast(url, podObj, episodes){
+    getFeedItem(url, item){
+        if(this.Feed.defined(url) === $DATA.DOES_NOT_EXIST)
+            return -1;
+        return this.Feed.get(url, item);
+    }
+
+    updatePodcast(url, podObj){
         //grantee that the feed exists
         if(this.addFeed(url, podObj) === -1){
             Object.keys(podObj).forEach((key) => {
                 this.Feed.set(url, key, podObj[key]);
             });
         }
-        // go in chronological order
-        episodes.forEach((epUrl) => {
-            if(this.Feed.defined(url, "episodes", epUrl) === $DATA.DOES_NOT_EXIST){
-                this.Feed.set(url, "episodes", epUrl);
-            } else {
-                // quit early if you have seen an episode before
-                // assumes latest to earliest ordering
-                return 0;
-            }
-        });
         // if you see an episode that 
         
     }
@@ -63,10 +64,6 @@ class feed {
  *          description: "",
  *          image: "image link"
  *          pubDate: "date"
- *          episodes: [
- *              <link>: "1",
- *              ...
- *          ]
  *      }, ...
  * }
  */

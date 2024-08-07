@@ -10,7 +10,7 @@ export const parseRSSFeed = async (rssURL) => {
         image: feed.itunes.image,
         pubDate: feed.pubDate,
     }
-    let episodes = []
+    let episodes = [];
     feed.items.forEach((item) => {
         episodes.push({
             title: item.title,
