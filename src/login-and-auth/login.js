@@ -1,6 +1,6 @@
 import {Elysia, redirect, t} from "elysia";
 import { GitHub , generateState } from "arctic";
-import { USERS, $DATA } from "../database/database.js"
+import { USERS } from "../database/users.js";
 import { jwt } from '@elysiajs/jwt';
 import {ACCESS_TOKEN_EXP, JWT_NAME, SECURE_FLAG} from "../../login-config.js"
 
@@ -79,18 +79,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
 		});
     const githubUserData = await githubUserResponse.json();
     // check if database has this user
-    switch (USERS.defined(githubUserData.email)){
-      case $DATA.DOES_NOT_EXIST:
-        // sign up the user
-        USERS.set(githubUserData.email, githubUserData.name);
-        break;
-      case $DATA.HAS_DATA_AND_DESCENDANTS:
-        // the user exists, and they 
-        break;
-      default:
-        // error handling
-        break;
-    }
+    USERS.addUser(githubUserData.email, githubUserData.name);
 
     const accessJWTToken = await jwt.sign({
       sub: githubUserData.email, // user id

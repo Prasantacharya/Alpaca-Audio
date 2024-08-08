@@ -1,5 +1,3 @@
-import { USERS } from "../database/database.js";
-
 export const PodcastCard = () => {
     return (
         <div class="podcast-card">

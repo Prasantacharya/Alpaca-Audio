@@ -10,7 +10,7 @@ class Users {
     }
 
     addUser(user, displayName = ""){
-        if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST)
+        if(this.Users.defined(user) !== $DATA.DOES_NOT_EXIST)
             return -1;
         this.Users.set(user, displayName);
     }
@@ -31,6 +31,12 @@ class Users {
             feeds.push(result.key[2]);
         }
         return feeds;
+    }
+
+    getUserDisplayName(user){
+        if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST)
+            return -1;
+        return this.Users.get(user)
     }
 
     deleteUser(user){

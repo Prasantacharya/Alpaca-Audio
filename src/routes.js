@@ -3,7 +3,7 @@ import { main } from './user-podcasts-page/index.jsx';
 import { welcomePage } from './main-page/index.js';
 import { loginModal, searchModal } from "./ui-components/modal.jsx";
 import { authPlugin } from './login-and-auth/login.js';
-import {USERS} from "./database/database.js";
+import {USERS} from "./database/users.js";
 import { parseRSSFeed } from './user-podcasts-page/user-podcasts-scripts.js';
 
 export const routes = new Elysia()
@@ -20,7 +20,7 @@ export const routes = new Elysia()
             rssFeedArr : [],
         };
         if(userId !== ""){
-            userProfile = USERS.get(userId);
+            userProfile = USERS.getUserDisplayName(userId);
         }
         return main(userId);
     });
@@ -31,7 +31,8 @@ export const htmxRoutes = new Elysia()
     .get("/modal/login", loginModal)
     .post("/add-rss", async ({userId, body}) => {
         if(userId === "") return ;
+        console.log(body);
         // grab the post from 
-        await parseRSSFeed()
+        // await parseRSSFeed(body.rssFeed);
     })
     .delete("/delete-element", () => {return ;});
