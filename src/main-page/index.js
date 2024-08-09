@@ -26,9 +26,9 @@ export const welcomePage = () => {
               </div>
 
               <h1 class="text-5xl font-bold">Alpaca Audio</h1>
-              <p class="py-6">Annotate Audio with Alpaca!</p>
-              <a href="./daisy-ui-rewrite-add-rss.html">
-                <button class="btn btn-primary">Get Started</button>
+              <p class="py-6">The App that Allows Anyone to Annotate their Audio!</p>
+              <a href="/github/login">
+                <button class="btn btn-primary">Login with Github</button>
               </a>
             </div>
           </div>
