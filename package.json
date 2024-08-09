@@ -3,7 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "daisyui": "^4.12.10"
   },
   "peerDependencies": {
     "typescript": "^5.5.3"
@@ -17,7 +18,8 @@
     "lucia": "^3.2.0",
     "mg-dbx-napi": "^1.4.10",
     "oslo": "1.2.1",
-    "rss-parser": "^3.13.0"
+    "rss-parser": "^3.13.0",
+    "tailwindcss": "^3.4.9"
   },
   "scripts": {
     "init-db": "source /usr/local/etc/ydb_env_unset && export ydb_dir=$PWD/yottadb && exec /usr/local/etc/ydb_env_set",
