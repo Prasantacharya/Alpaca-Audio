@@ -1,5 +1,5 @@
 import Elysia from 'elysia';
-import { main } from './user-podcasts-page/index.jsx';
+import { Feed } from './user-podcasts-page/index.jsx';
 import { welcomePage } from './main-page/index.js';
 import { loginModal, searchModal } from "./ui-components/modal.jsx";
 import { authPlugin } from './login-and-auth/login.js';
@@ -20,9 +20,13 @@ export const routes = new Elysia()
             rssFeedArr : [],
         };
         if(userId !== ""){
-            userProfile = USERS.getUserDisplayName(userId);
+            userProfile.username = userId;
+            userProfile.rssFeedArr = USERS.getUserRssFeeds(userId);
         }
-        return main(userId);
+        return Feed(userProfile);
+    })
+    .get("/episodes", ({userId}) => {
+        
     });
 
 export const htmxRoutes = new Elysia()

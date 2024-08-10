@@ -7,6 +7,9 @@ class feed {
         this.Feed = new mglobal(DB, "feed");
     }
 
+    generateFeedId(title){
+        
+    }
     /**
      * 
      * @param {string} url 
@@ -15,6 +18,7 @@ class feed {
     addFeed(url, feedObj){
         if(this.Feed.defined(url) !== $DATA.DOES_NOT_EXIST)
             return -1;
+        this.Feed.set(url, feedObj.url);
         this.Feed.set(url, "title", feedObj.title);
         this.Feed.set(url, "description", feedObj.description);
         this.Feed.set(url, "image", feedObj.image);

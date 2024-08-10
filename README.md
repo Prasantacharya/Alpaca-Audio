@@ -1,5 +1,5 @@
-# TimeStamped
-The podcast annotation app
+# Alpaca Audio
+Alpaca: The App that Allows Anyone to Annotate their Audio! 
 
 ## Yottadb install instructions:
 
@@ -55,4 +55,4 @@ You can use `bun run init-db` to automate steps 3 and 4 for you.
 
 ## Running
 
-After setting up the database setup, use `bun run start-timestamp`
+After setting up the database setup, use `bun run dev` or `bun run start`

@@ -79,7 +79,8 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
 		});
     const githubUserData = await githubUserResponse.json();
     // check if database has this user
-    USERS.addUser(githubUserData.email, githubUserData.name);
+    console.log(githubUserData.email + " : " + githubUserData.name);
+    // USERS.addUser(githubUserData.email, githubUserData.name);
 
     const accessJWTToken = await jwt.sign({
       sub: githubUserData.email, // user id
@@ -92,7 +93,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
       secure: SECURE_FLAG
     });
 
-    return redirect("/");
+    return redirect("/podcasts");
   } catch (e) {
     console.log("UH OH SPAGETTI OH : " + e);
   }

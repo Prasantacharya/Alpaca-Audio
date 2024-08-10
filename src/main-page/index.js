@@ -13,7 +13,7 @@ export const welcomePage = () => {
           type="text/css"
         />
         <script src="https://cdn.tailwindcss.com"></script>
-        <title>Document</title>
+        <title>Alpaca Audio</title>
       </head>
       <body class="h-screen flex flex-col">
         <NavBar></NavBar>

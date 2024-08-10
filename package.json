@@ -23,6 +23,7 @@
   },
   "scripts": {
     "init-db": "source /usr/local/etc/ydb_env_unset && export ydb_dir=$PWD/yottadb && exec /usr/local/etc/ydb_env_set",
-    "start-alpaca": "bunx tailwind -i ./public/input.css -o ./public/output.css && bun --watch index.js"
+    "dev": "bunx tailwind -i ./public/input.css -o ./public/output.css && bun --watch index.js",
+    "start": "bunx tailwind -i ./public/input.css -o ./public/output.css && bun index.js"
   }
 }
