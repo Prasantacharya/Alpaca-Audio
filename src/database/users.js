@@ -1,5 +1,5 @@
 import {$DATA, DB} from "./database";
-import {mglobal} from "mg-dbx-napi";
+import {mglobal, mcursor} from "mg-dbx-napi";
 
 class Users {
     /**
@@ -21,9 +21,15 @@ class Users {
         this.Users.set(user, "rss", url, "");
     }
 
+    /**
+     * 
+     * @param {*} user 
+     * @returns array of user rss feed links
+     */
     getUserRssFeeds(user){
-        if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST)
+        if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST){
             return -1;
+        }
         let query = new mcursor(DB, {global: "users", key: [user, "rss"]}, {multilevel: true});
         let feeds = [];
         let result;

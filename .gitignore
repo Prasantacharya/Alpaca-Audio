@@ -131,3 +131,4 @@ dist
 
 # yottadb
 yottadb/
+src/database/search

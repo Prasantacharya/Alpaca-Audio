@@ -85,7 +85,6 @@ class feed {
 /**
  * SCHEMA:
  * ^FEED : {
- * 
  *      <rss-feed-link>: {
  *          title: "",
  *          description: "",

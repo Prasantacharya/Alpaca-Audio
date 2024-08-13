@@ -15,16 +15,20 @@ export const routes = new Elysia()
         
     })
     .get("/podcasts", ({userId}) => {
+        
         let userProfile = {
             theme : "",
             rssFeedArr : [],
         };
+        
         if(userId !== ""){
-            console.log("user logged in - " + userId);
-            userProfile.username = USERS.getUserTheme(userId);
+            // console.log("user logged in - " + userId);
+            userProfile.theme = USERS.getUserTheme(userId);
+            // console.log(userProfile.theme);
             userProfile.rssFeedArr = USERS.getUserRssFeeds(userId);
+            // console.log(userProfile.rssFeedArr);
         }
-        console.log("TODO");
+        /**/
         return Feed(userProfile);
     })
     .get("/episodes", ({userId}) => {
