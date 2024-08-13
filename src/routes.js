@@ -16,13 +16,15 @@ export const routes = new Elysia()
     })
     .get("/podcasts", ({userId}) => {
         let userProfile = {
-            username : "",
+            theme : "",
             rssFeedArr : [],
         };
         if(userId !== ""){
-            userProfile.username = userId;
+            console.log("user logged in - " + userId);
+            userProfile.username = USERS.getUserTheme(userId);
             userProfile.rssFeedArr = USERS.getUserRssFeeds(userId);
         }
+        console.log("TODO");
         return Feed(userProfile);
     })
     .get("/episodes", ({userId}) => {

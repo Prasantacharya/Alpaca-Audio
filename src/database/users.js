@@ -9,10 +9,10 @@ class Users {
         this.Users = new mglobal(DB, "users");
     }
 
-    addUser(user, displayName = ""){
+    addUser(user, theme = "lofi"){
         if(this.Users.defined(user) !== $DATA.DOES_NOT_EXIST)
             return -1;
-        this.Users.set(user, displayName);
+        this.Users.set(user, theme);
     }
 
     followRSS(user, url){
@@ -33,7 +33,7 @@ class Users {
         return feeds;
     }
 
-    getUserDisplayName(user){
+    getUserTheme(user){
         if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST)
             return -1;
         return this.Users.get(user)
@@ -59,7 +59,7 @@ class Users {
  * ^USERS : {
  *
  *      <user-email>: {
- *          display-name: "<From github>",
+ *          "<user theme>", // default is lofi
  *          RSS : [
  *             <RSS-feed-url>: "",
  *              ... 

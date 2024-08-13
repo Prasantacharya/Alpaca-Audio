@@ -79,8 +79,8 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
 		});
     const githubUserData = await githubUserResponse.json();
     // check if database has this user
-    console.log(githubUserData.email + " : " + githubUserData.name);
-    // USERS.addUser(githubUserData.email, githubUserData.name);
+    // githubUserData.email + " : " + githubUserData.name);
+    USERS.addUser(githubUserData.email);
 
     const accessJWTToken = await jwt.sign({
       sub: githubUserData.email, // user id

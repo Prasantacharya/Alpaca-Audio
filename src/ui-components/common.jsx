@@ -113,7 +113,7 @@ export const Footer = () => {
         </div>
       </nav>
       <aside>
-        <p>Copyright © 2024 - All right reserved by ACME Industries Ltd</p>
+        <p>Copyright © 2024</p>
       </aside>
     </footer>
   );
@@ -135,7 +135,7 @@ const ThemeSwitcher = () => {
             name="theme-buttons"
             class="btn theme-controller join-item"
             aria-label="Default"
-            value="default"
+            value="lofi"
           />
           <input
             type="radio"

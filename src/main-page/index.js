@@ -3,7 +3,7 @@ import { NavBar, AlpacaSVG, Footer } from "../ui-components/common";
 
 export const welcomePage = () => {
   return (
-    <html lang="en">
+    <html lang="en" data-theme='lofi'>
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,7 +16,7 @@ export const welcomePage = () => {
         <title>Alpaca Audio</title>
       </head>
       <body class="h-screen flex flex-col">
-        <NavBar></NavBar>
+        <NavBar></NavBar> 
 
         <div class="hero bg-base-200 min-h-screen">
           <div class="hero-content text-center">
@@ -27,7 +27,7 @@ export const welcomePage = () => {
 
               <h1 class="text-5xl font-bold">Alpaca Audio</h1>
               <p class="py-6">The App that Allows Anyone to Annotate their Audio!</p>
-              <a href="/github/login">
+              <a href="/accounts/github/login">
                 <button class="btn btn-primary">Login with Github</button>
               </a>
             </div>

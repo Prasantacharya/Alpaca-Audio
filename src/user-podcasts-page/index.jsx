@@ -1,9 +1,14 @@
 // TODO
 import { NavBar, Footer } from "../ui-components/common";
 
-export const Feed = (userid) => {
+export const Feed = (profile) => {
+  console.log("Number of rss feeds: " + profile.rssFeedArr.length);
+  let userComp = "";
+  profile.rssFeedArr.forEach((rssFeed) => {
+    
+  });
   return (
-    <html lang="en">
+    <html lang="en" data-theme={profile.theme}>
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
