@@ -22,7 +22,7 @@
     "tailwindcss": "^3.4.9"
   },
   "scripts": {
-    "init-db": "source /usr/local/etc/ydb_env_unset && export ydb_dir=$PWD/yottadb && exec /usr/local/etc/ydb_env_set",
+    "init-db": "export sqlite_search=$PWD/src/database/search/podcastindex_feeds.db && bash /usr/local/etc/ydb_env_unset && export ydb_dir=$PWD/yottadb && bash /usr/local/etc/ydb_env_set",
     "dev": "bunx tailwind -i ./public/input.css -o ./public/output.css && bun --watch index.js",
     "start": "bunx tailwind -i ./public/input.css -o ./public/output.css && bun index.js"
   }

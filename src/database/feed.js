@@ -16,9 +16,9 @@ class feed {
      * @param {optional} feedObj 
      */
     addFeed(url, feedObj){
-        if(this.Feed.defined(url) !== $DATA.DOES_NOT_EXIST)
+        if(this.Feed.defined(url) !== $DATA.DOES_NOT_EXIST){
             return -1;
-        this.Feed.set(url, feedObj.url);
+        }
         this.Feed.set(url, "title", feedObj.title);
         this.Feed.set(url, "description", feedObj.description);
         this.Feed.set(url, "image", feedObj.image);
@@ -32,7 +32,8 @@ class feed {
      * @returns 
      */
     getFeed(url){
-        if(this.Feed.defined(url) === $DATA.DOES_NOT_EXIST)
+        console.log("From yottaDB, url: " + url + " - " + this.Feed.defined(url));
+        if(this.Feed.defined(url) !== $DATA.HAS_DATA_AND_DESCENDANTS)
             return -1;
         return {
             title: this.Feed.get(url, "title"),
