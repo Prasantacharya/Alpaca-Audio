@@ -1,5 +1,5 @@
 import Elysia from 'elysia';
-import { Feed, PodcastSearchGrid } from './user-podcasts-page/index.jsx';
+import { Feed, PaginateRows, PodcastSearchGrid } from './user-podcasts-page/index.jsx';
 import { welcomePage } from './main-page/index.js';
 import { loginModal, searchModal } from "./ui-components/modal.jsx";
 import { authPlugin } from './login-and-auth/login.js';
@@ -41,23 +41,22 @@ export const htmxRoutes = new Elysia()
     .use(authPlugin)
     .get("/modal/podcast", searchModal)
     .get("/modal/login", loginModal)
-    .post("/add-rss", ({body}) => {
-        let feedInfo = FEED.getFeed(body.searchbox);
+    .post("/add-rss", ({body: {searchbox}}) => {
+        let feedInfo = FEED.getFeed(searchbox);
         let feedArr;
         if(feedInfo === -1){
-            feedArr = search(body.searchbox);
+            feedArr = search(searchbox);
         } else{
             feedArr.push(feedInfo);
         }
-        // grab the post from 
-        return PodcastSearchGrid(feedArr);
         // await parseRSSFeed(body.rssFeed);
+        // grab the post from 
+        return PodcastSearchGrid(searchbox, feedArr);
     })
-    .post("/add-rss/", ({query: {page}}) => {
-        return PaginateRows();
-
-    })
-    .update("/add-podcast/:url", () => {
-        return "";
+    .get("/add-rows/", ({query: {searchQuery, page}}) => {
+        console.log("TEST");
+        console.log("Search for: " + searchQuery);
+        let feedArr = search(searchQuery, 15, page * 15);
+        return PaginateRows(searchQuery, feedArr, parseInt(page) + 1);
     })
     .delete("/delete-element", () => {return ;});

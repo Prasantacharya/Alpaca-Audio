@@ -8,9 +8,8 @@ export const searchDB = new Database(process.env.sqlite_search, { readonly: true
  * @param {string} query - query to search title or description
  * @returns object array of 
  */
-export function search(query, limit, offset){
+export function search(query, limit=15, offset=0){
     const searchQuery = searchDB.prepare("SELECT * FROM podcasts_fts WHERE podcasts_fts MATCH ?1 AND rank MATCH 'bm25(0,0,10,2,5,0)' ORDER BY rank LIMIT ?2 OFFSET ?3");
-    console.log("SEARCHING FOR " + query);
     const result = searchQuery.all(query, limit, offset);
     /*
     result.forEach((podcastObj) => {
@@ -21,6 +20,5 @@ export function search(query, limit, offset){
             pubDate: ""
         });
     });*/
-    console.log("Search number for " + query + " : " + result.length);
     return result;
 }

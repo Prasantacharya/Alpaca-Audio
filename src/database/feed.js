@@ -32,7 +32,6 @@ class feed {
      * @returns 
      */
     getFeed(url){
-        console.log("From yottaDB, url: " + url + " - " + this.Feed.defined(url));
         if(this.Feed.defined(url) !== $DATA.HAS_DATA_AND_DESCENDANTS)
             return -1;
         return {

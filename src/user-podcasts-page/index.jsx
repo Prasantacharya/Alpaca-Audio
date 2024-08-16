@@ -38,7 +38,7 @@ export const Feed = (profile) => {
                     name="searchbox"
                     class="grow"
                     placeholder="Search"
-                    hx-trigger="keyup changed delay:1s"
+                    hx-trigger="keyup changed delay:300ms"
                     hx-post="/add-rss"
                     hx-target="#search-results"
                   />
@@ -116,28 +116,51 @@ const AddRSSFeedCard = () => {
   );
 };
 
-export const PodcastSearchGrid = (feedArr) => {
+export const PodcastSearchGrid = (searchQuery, feedArr) => {
   let outputJSX = [];
-  feedArr.forEach((feedObj) => {
-    outputJSX.push(
-      <tr 
-      class="hover"
-      hx-on:click="">
-        <td>
-          <div class="avatar">
-            <div class="mask mask-squircle h-24 w-24">
-              <img src={feedObj.imageUrl} alt="Image Failed"/>
+  const paginateStr = "/add-rows/?page=2&searchQuery=" + searchQuery;
+  feedArr.forEach((feedObj, i) => {
+    if(i === feedArr.length - 1){
+      outputJSX.push(
+        <tr 
+        class="hover"
+        hx-trigger="intersect once"
+        hx-get={paginateStr}
+        hx-swap="afterend">
+          <td>
+            <div class="avatar">
+              <div class="mask mask-squircle h-24 w-24">
+                <img src={feedObj.imageUrl} alt="Image Failed"/>
+              </div>
             </div>
-          </div>
-        </td>
-        <td>
-          <div class="flex items-center gap-3">
-            <div class="font-bold">{feedObj.title}</div>
-            <div class="text-sm opacity-50">{feedObj.description}</div>
-          </div>
-        </td>
-      </tr>
-    );
+          </td>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="font-bold">{feedObj.title}</div>
+              <div class="text-sm opacity-50">{feedObj.description}</div>
+            </div>
+          </td>
+        </tr>
+      );
+    } else {
+      outputJSX.push(
+        <tr class="hover">
+          <td>
+            <div class="avatar">
+              <div class="mask mask-squircle h-24 w-24">
+                <img src={feedObj.imageUrl} alt="Image Failed"/>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="font-bold">{feedObj.title}</div>
+              <div class="text-sm opacity-50">{feedObj.description}</div>
+            </div>
+          </td>
+        </tr>
+      );
+    }
   });
 
   return (
@@ -157,13 +180,16 @@ export const PodcastSearchGrid = (feedArr) => {
   );
 };
 
-export const PaginateRows = (feedArr) => {
+export const PaginateRows = (searchQuery, feedArr, page) => {
   let outputJSX = [];
-  feedArr.forEach((feedObj) => {
-    outputJSX.push(
+  const paginateStr = "/add-rows/?page=" + page + "&searchQuery=" + searchQuery;
+  feedArr.forEach((feedObj, i) => {
+    if(i !== feedArr.length - 1){
+      outputJSX.push(
       <tr 
       class="hover"
-      hx-on:click="">
+      hx-on:click=""
+      >
         <td>
           <div class="avatar">
             <div class="mask mask-squircle h-24 w-24">
@@ -178,13 +204,43 @@ export const PaginateRows = (feedArr) => {
           </div>
         </td>
       </tr>
-    );
+      );
+    } else {
+      outputJSX.push(
+        <tr 
+        class="hover"
+        hx-trigger="intersect once"
+        hx-get={paginateStr}
+        hx-swap="afterend">
+          <td>
+            <div class="avatar">
+              <div class="mask mask-squircle h-24 w-24">
+                <img src={feedObj.imageUrl} alt="Image Failed"/>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="font-bold">{feedObj.title}</div>
+              <div class="text-sm opacity-50">{feedObj.description}</div>
+            </div>
+          </td>
+        </tr>
+        );
+    }
   });
-  return 
+  return (
+    <>
+      {...outputJSX}
+    </>
+
+  );
 }
 
 export const PodcastEpisodeGrid = () => {
   return (
-    <div></div>
+    <>
+      
+    </>
   );
 }
