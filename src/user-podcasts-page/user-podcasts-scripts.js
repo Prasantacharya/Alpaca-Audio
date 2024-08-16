@@ -1,6 +1,18 @@
 import Parser from "rss-parser"
 
-let parser = new Parser();
+export var parser = new Parser();
+
+export const parsePodcastInfoOnly = async (rssURL) => {
+    let [podcast, episodes] = await parseRSSFeed(rssURL);
+    console.log("Parsed " + podcast.title);
+    return {
+        title: podcast.title,
+        description: podcast.description,
+        image: podcast.itunes.image,
+        pubDate: podcast.pubDate,
+        totalEp: 5
+    };
+}
 
 export const parseRSSFeed = async (rssURL) => {
     let feed = await parser.parseURL(rssURL);
@@ -20,5 +32,5 @@ export const parseRSSFeed = async (rssURL) => {
             explicit: item.itunes.explicit
         })
     });
-    return (podcast, episodes);
+    return [podcast, episodes];
 }

@@ -25,7 +25,7 @@ export const Feed = (profile) => {
       <body class="h-screen flex flex-col">
         <NavBar></NavBar>
 
-        <div class="bg-base-300 flex flex-row flex-wrap justify-center gap-5 items-stretch">
+        <div id="podcast-area" class="bg-base-300 flex flex-row flex-wrap justify-center gap-5 items-stretch">
           <AddRSSFeedCard></AddRSSFeedCard>
           <dialog id="searchRSS" class="modal">
             <div class="modal-box">
@@ -71,7 +71,8 @@ export const Feed = (profile) => {
   );
 };
 
-const PodcastCard = (podcastInfo) => {
+export const PodcastCard = (podcastInfo) => {
+  console.log(podcastInfo);
   return (
     <div class="card card-compact hover:scale-[1.03] ease-in-out duration-150 cursor-pointer my-5 bg-base-100 shadow-xl glass max-w-60">
       <figure>
@@ -124,10 +125,18 @@ export const PodcastSearchGrid = (searchQuery, feedArr) => {
       outputJSX.push(
         <tr 
         class="hover"
-        hx-trigger="intersect once"
-        hx-get={paginateStr}
-        hx-swap="afterend">
-          <td>
+        id="row-2"
+        hx-target="#podcast-area"
+        hx-trigger="click"
+        hx-get={"/add-podcast/?url=" + feedObj.url}
+        hx-swap="innerHTML"
+        >
+          <td
+          hx-target="#row-2"
+          hx-trigger="intersect once"
+          hx-get={paginateStr}
+          hx-swap="afterend"
+          >
             <div class="avatar">
               <div class="mask mask-squircle h-24 w-24">
                 <img src={feedObj.imageUrl} alt="Image Failed"/>
@@ -144,7 +153,13 @@ export const PodcastSearchGrid = (searchQuery, feedArr) => {
       );
     } else {
       outputJSX.push(
-        <tr class="hover">
+        <tr 
+        class="hover"
+        hx-target="#podcast-area"
+        hx-trigger="click"
+        hx-get={"/add-podcast/?url=" + feedObj.url}
+        hx-swap="innerHTML"
+        >
           <td>
             <div class="avatar">
               <div class="mask mask-squircle h-24 w-24">
@@ -188,8 +203,7 @@ export const PaginateRows = (searchQuery, feedArr, page) => {
       outputJSX.push(
       <tr 
       class="hover"
-      hx-on:click=""
-      >
+      hx-on:click="">
         <td>
           <div class="avatar">
             <div class="mask mask-squircle h-24 w-24">
@@ -209,10 +223,13 @@ export const PaginateRows = (searchQuery, feedArr, page) => {
       outputJSX.push(
         <tr 
         class="hover"
-        hx-trigger="intersect once"
-        hx-get={paginateStr}
-        hx-swap="afterend">
-          <td>
+        id={"row-" + page}>
+          <td
+          hx-target={'#row-' + page}
+          hx-trigger="intersect once"
+          hx-get={paginateStr}
+          hx-swap="afterend"
+          >
             <div class="avatar">
               <div class="mask mask-squircle h-24 w-24">
                 <img src={feedObj.imageUrl} alt="Image Failed"/>

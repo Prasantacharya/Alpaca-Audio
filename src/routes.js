@@ -1,12 +1,11 @@
 import Elysia from 'elysia';
-import { Feed, PaginateRows, PodcastSearchGrid } from './user-podcasts-page/index.jsx';
+import { Feed, PaginateRows, PodcastCard, PodcastSearchGrid } from './user-podcasts-page/index.jsx';
 import { welcomePage } from './main-page/index.js';
-import { loginModal, searchModal } from "./ui-components/modal.jsx";
 import { authPlugin } from './login-and-auth/login.js';
 import {USERS} from "./database/users.js";
 import { FEED } from './database/feed.js';
 import { search } from './database/podcast-search.js';
-import { parseRSSFeed } from './user-podcasts-page/user-podcasts-scripts.js';
+import { parsePodcastInfoOnly, parseRSSFeed } from './user-podcasts-page/user-podcasts-scripts.js';
 
 export const routes = new Elysia()
     .use(authPlugin)
@@ -17,20 +16,14 @@ export const routes = new Elysia()
         
     })
     .get("/podcasts", ({userId}) => {
-        
         let userProfile = {
             theme : "",
             rssFeedArr : [],
         };
-        
         if(userId !== ""){
-            // console.log("user logged in - " + userId);
             userProfile.theme = USERS.getUserTheme(userId);
-            // console.log(userProfile.theme);
             userProfile.rssFeedArr = USERS.getUserRssFeeds(userId);
-            // console.log(userProfile.rssFeedArr);
         }
-        /**/
         return Feed(userProfile);
     })
     .get("/episodes", ({userId}) => {
@@ -39,8 +32,6 @@ export const routes = new Elysia()
 
 export const htmxRoutes = new Elysia()
     .use(authPlugin)
-    .get("/modal/podcast", searchModal)
-    .get("/modal/login", loginModal)
     .post("/add-rss", ({body: {searchbox}}) => {
         let feedInfo = FEED.getFeed(searchbox);
         let feedArr;
@@ -58,5 +49,20 @@ export const htmxRoutes = new Elysia()
         console.log("Search for: " + searchQuery);
         let feedArr = search(searchQuery, 15, page * 15);
         return PaginateRows(searchQuery, feedArr, parseInt(page) + 1);
+    })
+    .get("/add-podcast/", async ({userId, query: {url}}) => {
+        console.log("TEST ADD-PODCAST");
+        let rssRet = await parsePodcastInfoOnly(url);
+        console.log("ADDING SOMETHING");
+        console.log("Parsed " + rssRet.title + " | ")
+        if(userId !== ""){
+            console.log("USER LOGGED IN")
+            // add podcast to user field
+            USERS.followRSS(userId, url);
+        } else {
+            console.log("USER NOT LOGGED IN");
+        }
+        console.log(rssRet.title);
+        return PodcastCard(rssRet);
     })
     .delete("/delete-element", () => {return ;});
