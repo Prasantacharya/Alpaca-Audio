@@ -71,8 +71,7 @@ export const Feed = (profile) => {
   );
 };
 
-export const PodcastCard = (podcastInfo) => {
-  console.log(podcastInfo);
+export const PodcastCard = (podcastInfo, numberOfEpisodes) => {
   return (
     <div class="card card-compact hover:scale-[1.03] ease-in-out duration-150 cursor-pointer my-5 bg-base-100 shadow-xl glass max-w-60">
       <figure>
@@ -84,7 +83,7 @@ export const PodcastCard = (podcastInfo) => {
         </h2>
         <p>{podcastInfo.description}</p>
         <div class="card-actions justify-end">
-          <div class="badge badge-outline">{podcastInfo.totalEp} episodes</div>
+          <div class="badge badge-outline">{numberOfEpisodes} episodes</div>
         </div>
       </div>
     </div>
@@ -94,6 +93,7 @@ export const PodcastCard = (podcastInfo) => {
 const AddRSSFeedCard = () => {
   return (
     <div
+      id="add-rss-card"
       onclick="searchRSS.showModal()"
       class="card card-compact hover:scale-[1.03] ease-in-out duration-150 cursor-pointer my-5 bg-base-100 shadow-xl glass max-w-60"
     >
@@ -126,10 +126,10 @@ export const PodcastSearchGrid = (searchQuery, feedArr) => {
         <tr 
         class="hover"
         id="row-2"
-        hx-target="#podcast-area"
+        hx-target="#add-rss-card"
         hx-trigger="click"
         hx-get={"/add-podcast/?url=" + feedObj.url}
-        hx-swap="innerHTML"
+        hx-swap="afterend"
         >
           <td
           hx-target="#row-2"
@@ -155,10 +155,10 @@ export const PodcastSearchGrid = (searchQuery, feedArr) => {
       outputJSX.push(
         <tr 
         class="hover"
-        hx-target="#podcast-area"
+        hx-target="#add-rss-card"
         hx-trigger="click"
         hx-get={"/add-podcast/?url=" + feedObj.url}
-        hx-swap="innerHTML"
+        hx-swap="afterend"
         >
           <td>
             <div class="avatar">
@@ -203,7 +203,11 @@ export const PaginateRows = (searchQuery, feedArr, page) => {
       outputJSX.push(
       <tr 
       class="hover"
-      hx-on:click="">
+      hx-target="#add-rss-card"
+      hx-trigger="click"
+      hx-get={"/add-podcast/?url=" + feedObj.url}
+      hx-swap="afterend"
+        >
         <td>
           <div class="avatar">
             <div class="mask mask-squircle h-24 w-24">
@@ -223,7 +227,12 @@ export const PaginateRows = (searchQuery, feedArr, page) => {
       outputJSX.push(
         <tr 
         class="hover"
-        id={"row-" + page}>
+        id={"row-" + page}
+        hx-target="#add-rss-card"
+        hx-trigger="click"
+        hx-get={"/add-podcast/?url=" + feedObj.url}
+        hx-swap="afterend"
+        >
           <td
           hx-target={'#row-' + page}
           hx-trigger="intersect once"

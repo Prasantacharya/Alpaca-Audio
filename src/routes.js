@@ -5,7 +5,7 @@ import { authPlugin } from './login-and-auth/login.js';
 import {USERS} from "./database/users.js";
 import { FEED } from './database/feed.js';
 import { search } from './database/podcast-search.js';
-import { parsePodcastInfoOnly, parseRSSFeed } from './user-podcasts-page/user-podcasts-scripts.js';
+import { parseRSSFeed } from './user-podcasts-page/user-podcasts-scripts.js';
 
 export const routes = new Elysia()
     .use(authPlugin)
@@ -15,7 +15,7 @@ export const routes = new Elysia()
     .get("/about", () => {
         
     })
-    .get("/podcasts", ({userId}) => {
+    .get("/feed", ({userId}) => {
         let userProfile = {
             theme : "",
             rssFeedArr : [],
@@ -52,9 +52,7 @@ export const htmxRoutes = new Elysia()
     })
     .get("/add-podcast/", async ({userId, query: {url}}) => {
         console.log("TEST ADD-PODCAST");
-        let rssRet = await parsePodcastInfoOnly(url);
-        console.log("ADDING SOMETHING");
-        console.log("Parsed " + rssRet.title + " | ")
+        let [podcast, episode] = await parseRSSFeed(url);
         if(userId !== ""){
             console.log("USER LOGGED IN")
             // add podcast to user field
@@ -62,7 +60,7 @@ export const htmxRoutes = new Elysia()
         } else {
             console.log("USER NOT LOGGED IN");
         }
-        console.log(rssRet.title);
-        return PodcastCard(rssRet);
+        console.log(podcast.title);
+        return PodcastCard(podcast, episode.length);
     })
     .delete("/delete-element", () => {return ;});

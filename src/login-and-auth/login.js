@@ -93,7 +93,7 @@ export const loginAndLogout = new Elysia({ prefix: "/accounts"})
       secure: SECURE_FLAG
     });
 
-    return redirect("/podcasts");
+    return redirect("/feed");
   } catch (e) {
     console.log("UH OH SPAGETTI OH : " + e);
   }
