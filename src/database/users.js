@@ -45,6 +45,12 @@ class Users {
         return this.Users.get(user)
     }
 
+    setUserTheme(user, theme){
+        if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST)
+            return -1;
+        return this.Users.set(user, theme);
+    }
+
     deleteUser(user){
         if(this.Users.defined(user) === $DATA.DOES_NOT_EXIST)
             return -1;

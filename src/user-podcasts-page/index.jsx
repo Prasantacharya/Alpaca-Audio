@@ -71,22 +71,24 @@ export const Feed = (profile) => {
   );
 };
 
-export const PodcastCard = (podcastInfo, numberOfEpisodes) => {
+export const PodcastCard = (url, podcastInfo, numberOfEpisodes) => {
   return (
-    <div class="card card-compact hover:scale-[1.03] ease-in-out duration-150 cursor-pointer my-5 bg-base-100 shadow-xl glass max-w-60">
-      <figure>
-        <img src={podcastInfo.image} alt="podcast-image" />
-      </figure>
-      <div class="card-body">
-        <h2 class="card-title">
-          <a href="daisy-ui-rewrite-list-episodes.html">{podcastInfo.title}</a>
-        </h2>
-        <p>{podcastInfo.description}</p>
-        <div class="card-actions justify-end">
-          <div class="badge badge-outline">{numberOfEpisodes} episodes</div>
+    <a href={"/podcast/?show=" + btoa(url)}>
+      <div class="card card-compact hover:scale-[1.03] ease-in-out duration-150 cursor-pointer my-5 bg-base-100 shadow-xl glass max-w-60">
+        <figure>
+          <img src={podcastInfo.image} alt="podcast-image" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">
+            {podcastInfo.title}
+          </h2>
+          <p>{podcastInfo.description}</p>
+          <div class="card-actions justify-end">
+            <div class="badge badge-outline">{numberOfEpisodes} episodes</div>
+          </div>
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 
@@ -260,13 +262,5 @@ export const PaginateRows = (searchQuery, feedArr, page) => {
       {...outputJSX}
     </>
 
-  );
-}
-
-export const PodcastEpisodeGrid = () => {
-  return (
-    <>
-      
-    </>
   );
 }

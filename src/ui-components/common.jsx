@@ -68,7 +68,7 @@ export const NavBar = () => {
         </a>
       </div>
       <div class="navbar-end lg:flex">
-        <button class="btn btn-ghost" onclick="location.href='/podcasts'">Feed</button>
+        <button class="btn btn-ghost" onclick="location.href='/feed'">Feed</button>
         <button class="btn btn-ghost">Notes</button>
         <div class="divider divider-horizontal divider-neutral"></div>
         <ThemeSwitcher></ThemeSwitcher>
@@ -194,6 +194,8 @@ const ThemeSwitcher = () => {
             class="btn theme-controller join-item"
             aria-label="Default"
             value="lofi"
+            hx-update="/colorscheme/?theme=lofi"
+            hx-swap="none"
           />
           <input
             type="radio"
@@ -201,6 +203,8 @@ const ThemeSwitcher = () => {
             class="btn theme-controller join-item"
             aria-label="Dracula"
             value="dracula"
+            hx-update="/colorscheme/?theme=dracula"
+            hx-swap="none"
           />
           <input
             type="radio"
@@ -208,6 +212,17 @@ const ThemeSwitcher = () => {
             class="btn theme-controller join-item"
             aria-label="Nord"
             value="nord"
+            hx-update="/colorscheme/?theme=nord"
+            hx-swap="none"
+          />
+          <input
+            type="radio"
+            name="theme-buttons"
+            class="btn theme-controller join-item"
+            aria-label="Halloween"
+            value="halloween"
+            hx-update="/colorscheme/?theme=halloween"
+            hx-swap="none"
           />
         </div>
       </div>

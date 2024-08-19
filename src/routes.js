@@ -6,6 +6,7 @@ import {USERS} from "./database/users.js";
 import { FEED } from './database/feed.js';
 import { search } from './database/podcast-search.js';
 import { parseRSSFeed } from './user-podcasts-page/user-podcasts-scripts.js';
+import { Episodes } from './podcast-episodes/podcast-episode.js';
 
 export const routes = new Elysia()
     .use(authPlugin)
@@ -26,12 +27,25 @@ export const routes = new Elysia()
         }
         return Feed(userProfile);
     })
-    .get("/episodes", ({userId}) => {
+    .get("/podcast/", async ({userId, query: {show}}) => {
+        const decodedURL = atob(show); 
+        console.log("decoded url - " + decodedURL);
         
+        let [podcast, episodes] = await parseRSSFeed(decodedURL);
+        let theme = "";
+        if(userId !== ""){
+            theme = USERS.getUserTheme(userId);
+        }
+        return Episodes(podcast, episodes, theme);
     });
 
 export const htmxRoutes = new Elysia()
     .use(authPlugin)
+    .post("/colorscheme", (userId, {query: {theme}}) => {
+        if(userId !== ""){
+            USERS.setUserTheme(userId, theme);
+        }
+    })
     .post("/add-rss", ({body: {searchbox}}) => {
         let feedInfo = FEED.getFeed(searchbox);
         let feedArr;
@@ -40,8 +54,6 @@ export const htmxRoutes = new Elysia()
         } else{
             feedArr.push(feedInfo);
         }
-        // await parseRSSFeed(body.rssFeed);
-        // grab the post from 
         return PodcastSearchGrid(searchbox, feedArr);
     })
     .get("/add-rows/", ({query: {searchQuery, page}}) => {
@@ -60,7 +72,6 @@ export const htmxRoutes = new Elysia()
         } else {
             console.log("USER NOT LOGGED IN");
         }
-        console.log(podcast.title);
-        return PodcastCard(podcast, episode.length);
+        return PodcastCard(url, podcast, episode.length);
     })
     .delete("/delete-element", () => {return ;});

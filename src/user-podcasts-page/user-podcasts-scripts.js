@@ -25,9 +25,11 @@ export const parseRSSFeed = async (rssURL) => {
     feed.items.forEach((item) => {
         episodes.push({
             title: item.title,
-            link: item.link,
+            link: item.enclosure.url,
             image: item.itunes.image,
-            description: item.itunes.subtitle,
+            description: item.contentSnippet,
+            duration: item.itunes.duration,
+            pubDate: item.pubDate,
             explicit: item.itunes.explicit
         })
     });
